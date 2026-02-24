@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+        <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
+        <meta
+        http-equiv="Content-Security-Policy"
+        content="default-src 'self'; script-src 'self'"
+        />
+        <meta
+        http-equiv="X-Content-Security-Policy"
+        content="default-src 'self'; script-src 'self'"
+        />
+    <title>ArcSuiteログイン</title>
+    <link rel="stylesheet" href="./Style/arclogin.css">
+</head>
+<body>
+
+    <div class="login-container">
+        <h2>ArcSuiteログイン</h2>
+        <form id="loginForm">
+            <input type="text" id="username" placeholder="ユーザーID" required>
+            <input type="password" id="password" placeholder="パスワード" required>
+            <button type="submit">ログイン</button>
+            <div class="error-message" id="errorMsg">ユーザー名またはパスワードが間違っています。</div>
+        </form>
+    </div>
+    <script src="./Scripts/arclogin.js"></script>
+    <script src="./Scripts/arcsuite.js"></script>
+</body>
+</html>

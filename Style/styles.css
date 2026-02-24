@@ -1,0 +1,128 @@
+/* Layout and spacing for date inputs */
+.date-inputs { 
+    display:flex; 
+    gap:16px; 
+    align-items:center; 
+    margin:1.25em 0; 
+    flex-wrap:wrap; 
+}
+.date-item { 
+    display:flex; 
+    align-items:center; 
+    gap:8px; 
+}
+.date-item label { 
+    font-weight:normal; 
+    color:#222; 
+}
+#startDate, #endDate { 
+    padding:6px 8px; 
+    border:1px solid #ccc; 
+    border-radius:4px; 
+}
+.search_button { 
+    padding:8px 14px; 
+    border-radius:5px; 
+    cursor:pointer; 
+    background:#4472c4; 
+    color:#fff; 
+    border:none; 
+}
+
+/* Small screens: stack items */
+@media (max-width:600px) {
+  .date-inputs { flex-direction:column; align-items:flex-start; gap:10px; }
+  .date-item { width:100%; }
+}
+
+.control-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.control-item label { font-weight: normal; color: #222; }
+.control-item select { padding: 6px 8px; border: 1px solid #ccc; border-radius: 4px; }
+.control-item input[type="radio"] { margin-right: 6px; }
+
+#roleSelect, #periodSelect {
+    border: none; 
+    padding: 0; 
+    margin: 0; 
+    display: inline;
+}
+
+#regionSelect, #userSelect {
+    font-family: 'Meiryo UI';
+    font-size: 0.9em;
+}
+
+
+body {
+    font-family: 'Meiryo UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #d9e1f2;
+    color: var(--black);
+    margin: 0;
+    padding: 20px;
+    font-size: 0.9em;
+}
+
+#loading-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent gray */
+        z-index: 9999; /* Ensure it sits on top of everything */
+        display: none; /* Hidden by default */
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+    }
+
+/* 2. The Spinner Circle */
+.spinner {
+    border: 8px solid #f3f3f3; /* Light grey */
+    border-top: 8px solid #3498db; /* Blue */
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    animation: spin 1s linear infinite;
+    margin-bottom: 15px;
+}
+
+/* 3. Optional Loading Text */
+.loading-text {
+    color: white;
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+/* 4. The Animation */
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+:root {
+    --darkslateBlue: #483d8b; /* 濃い青 */
+    --slateBlue: #6A5ACD; /* 濃い青 */
+    --royalBlue: #4169E1; /* ロイヤルブルー */
+    --vtexBlue: #0057ad; /* 青 */
+    --dodgerBlue: #1E90FF; /* 薄い青 */
+    --vtexlightBlue: rgba(0, 87, 173, 0.32); /* 薄い青 */
+    --dodgerlightBlue: rgba(30, 144, 255, 0.3); /* 薄い青 */
+    --green: #008000; /* 緑 */
+    --lime:#00ff00; /* 黄緑 */
+    --greenYellow: #adff2f; /* 黄緑色 */
+    --yellow: #ffff00; /* 黄色 */
+    --lightyellow: #ffffe0; /* 薄い黄色 */
+    --mistyRose: #FFE4E1; /* 薄いピンク */
+    --red: #ff0000; /* 赤 */
+    --white: #ffffff; /* 白 */
+    --graywhite: #f1f1f1; /* 暗い白 */
+    --lightgray: #D3D3D3; /* 薄い灰色 */
+    --gray: #808080; /* 灰色 */
+    --black: #000000; /* 黒 */
+}

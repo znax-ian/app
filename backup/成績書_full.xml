@@ -1,0 +1,460 @@
+`--uuid:146cb563-8de6-4b8d-ad08-3440ea99400d
+Content-Type: application/xop+xml; charset=UTF-8; type="text/xml"
+Content-Transfer-Encoding: binary
+Content-ID: 
+<root.message@cxf.apache.org>
+	<soap:Envelope
+		xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+		<SOAP-ENV:Header
+			xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/">
+			<Session
+				xmlns="http://www.fujixerox.co.jp/2006/08/arcsuite/ws/types"
+				xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" SOAP-ENV:mustUnderstand="0">64f87e41dcd3fa35c4b9584892816cf9b430d320
+			</Session>
+		</SOAP-ENV:Header>
+		<soap:Body>
+			<searchRepositoryObjectsResponse
+				xmlns="http://www.fujixerox.co.jp/2006/08/arcsuite/ws/types">
+				<searchRepositoryObjectsReturn>
+					<repositoryObject>
+						<id>rep:ARCSVTEX:31_SEIZOU_CAB:160980865414454</id>
+						<objectClass name="system:document" ns="rep">
+							<label lang="en">Document</label>
+							<label lang="ja">&#x30c9;&#x30ad;&#x30e5;&#x30e1;&#x30f3;&#x30c8;</label>
+						</objectClass>
+						<attributes>
+							<attribute name="user:customar" ns="rep">
+								<attributeValue
+									xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="StringValue">
+									<string>&#x30ad;&#x30e4;&#x30ce;&#x30f3;&#x30c8;&#x30c3;&#x30ad;</string>
+								</attributeValue>
+							</attribute>
+							<attribute name="system:offlinecontentflag" ns="rep">
+								<attributeValue
+									xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="BooleanValue">
+									<boolean>false</boolean>
+								</attributeValue>
+							</attribute>
+							<attribute name="system:templatename" ns="rep">
+								<attributeValue
+									xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="StringValue">
+									<string>31_&#x88fd;&#x9020;&#x66f8;&#x5eab;</string>
+								</attributeValue>
+							</attribute>
+							<attribute name="system:contentsizebytes" ns="rep">
+								<attributeValue
+									xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="LongValue">
+									<long>1296843</long>
+								</attributeValue>
+							</attribute>
+							<attribute name="system:pagesize" ns="rep">
+								<attributeValue
+									xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="StringValue">
+									<string>A4</string>
+								</attributeValue>
+							</attribute>
+							<attribute name="system:colordepth" ns="rep">
+								<attributeValue
+									xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="IntValue">
+									<int>1</int>
+								</attributeValue>
+							</attribute>
+							<attribute name="system:numberofpages" ns="rep">
+								<attributeValue
+									xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="IntValue">
+									<int>7</int>
+								</attributeValue>
+							</attribute>
+							<attribute name="system:statuschangedon" ns="rep">
+								<attributeValue
+									xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="DateTimeValue">
+									<dateTime>2021-01-05T01:04:14.000Z</dateTime>
+								</attributeValue>
+							</attribute>
+							<attribute name="system:allcontentlabellist" ns="rep">
+								<attributeValue
+									xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="I18nStringValues">
+									<i18nStrings name="system:primary" ns="rep">
+										<label lang="en">Primary</label>
+										<label lang="ja">&#x30d7;&#x30e9;&#x30a4;&#x30de;&#x30ea;&#x30fc;</label>
+									</i18nStrings>
+									<i18nStrings name="system:view" ns="rep">
+										<label lang="en">View</label>
+										<label lang="ja">&#x30a4;&#x30f3;&#x30c7;&#x30c3;&#x30af;&#x30b9;</label>
+									</i18nStrings>
+									<i18nStrings name="system:nail" ns="rep">
+										<label lang="en">Thumbnail</label>
+										<label lang="ja">&#x5168;&#x30da;&#x30fc;&#x30b8;&#x30b5;&#x30e0;&#x30cd;&#x30a4;&#x30eb;</label>
+									</i18nStrings>
+									<i18nStrings name="system:text" ns="rep">
+										<label lang="en">Text</label>
+										<label lang="ja">&#x30c6;&#x30ad;&#x30b9;&#x30c8;</label>
+									</i18nStrings>
+									<i18nStrings name="system:topnail" ns="rep">
+										<label lang="en">Top Page Thumbnail</label>
+										<label lang="ja">&#x5148;&#x982d;&#x30da;&#x30fc;&#x30b8;&#x30b5;&#x30e0;&#x30cd;&#x30a4;&#x30eb;</label>
+									</i18nStrings>
+								</attributeValue>
+							</attribute>
+							<attribute name="system:pagewidth" ns="rep">
+								<attributeValue
+									xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="DoubleValue">
+									<double>210.13999938964844</double>
+								</attributeValue>
+							</attribute>
+							<attribute name="system:status" ns="rep">
+								<attributeValue
+									xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="I18nStringValue">
+									<i18nString name="system:editable" ns="rep">
+										<label lang="en">Editable</label>
+										<label lang="ja">&#x7de8;&#x96c6;&#x53ef;&#x80fd;</label>
+									</i18nString>
+								</attributeValue>
+							</attribute>
+							<attribute name="system:resolution" ns="rep">
+								<attributeValue
+									xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="LongValue">
+									<long>600</long>
+								</attributeValue>
+							</attribute>
+							<attribute name="user:zuban" ns="rep">
+								<attributeValue
+									xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="StringValue">
+									<string>I-F-20003-2-01</string>
+								</attributeValue>
+							</attribute>
+							<attribute name="system:objectcategory" ns="rep">
+								<attributeValue
+									xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="I18nStringValue">
+									<i18nString name="system:document" ns="rep">
+										<label lang="en">Document</label>
+										<label lang="ja">&#x30c9;&#x30ad;&#x30e5;&#x30e1;&#x30f3;&#x30c8;</label>
+									</i18nString>
+								</attributeValue>
+							</attribute>
+							<attribute name="system:createdby" ns="rep">
+								<attributeValue
+									xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="RmsObjectValueRmsObject">
+									<rmsObject>
+										<id>rms:nimid:11:3db5-0000000021</id>
+										<objectClass name="user">
+											<label lang="en">User</label>
+										</objectClass>
+										<attributes>
+											<attribute lang="ja" name="displayName" ns="rms">
+												<attributeValue xsi:type="StringValue">
+													<string>&#x5409;&#x6fa4;&#x3000;&#x307f;&#x3086;&#x304d;</string>
+												</attributeValue>
+											</attribute>
+											<attribute name="rmsMailable" ns="rms">
+												<attributeValue xsi:type="BooleanValue">
+													<boolean>true</boolean>
+												</attributeValue>
+											</attribute>
+											<attribute name="givenName" ns="rms">
+												<attributeValue xsi:type="StringValue">
+													<string>&#x307f;&#x3086;&#x304d;</string>
+												</attributeValue>
+											</attribute>
+											<attribute name="displayName" ns="rms">
+												<attributeValue xsi:type="StringValue">
+													<string>&#x5409;&#x6fa4;&#x3000;&#x307f;&#x3086;&#x304d;</string>
+												</attributeValue>
+											</attribute>
+											<attribute name="uid" ns="rms">
+												<attributeValue xsi:type="StringValue">
+													<string>m_yoshizawa</string>
+												</attributeValue>
+											</attribute>
+											<attribute name="sn" ns="rms">
+												<attributeValue xsi:type="StringValue">
+													<string>&#x5409;&#x6fa4;</string>
+												</attributeValue>
+											</attribute>
+											<attribute name="cn" ns="rms">
+												<attributeValue xsi:type="StringValue">
+													<string>&#x5409;&#x6fa4;&#x3000;&#x307f;&#x3086;&#x304d;</string>
+												</attributeValue>
+											</attribute>
+											<attribute name="rmsUserRoleIDs" ns="rms">
+												<attributeValue xsi:type="StringValues">
+													<strings>nimid:13:3db5-000000004a</strings>
+													<strings>nimid:13:3db5-0000000039</strings>
+													<strings>nimid:13:3db5-0000000050</strings>
+													<strings>nimid:13:3db5-00000002c5</strings>
+												</attributeValue>
+											</attribute>
+											<attribute name="rmsCardID" ns="rms">
+												<attributeValue xsi:type="StringValues"/>
+											</attribute>
+										</attributes>
+										<dn>uid=m_yoshizawa,ou=users,dc=ArcSuite</dn>
+									</rmsObject>
+								</attributeValue>
+							</attribute>
+							<attribute name="system:mediatype" ns="rep">
+								<attributeValue
+									xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="StringValue">
+									<string>application/vnd.fujixerox.docuworks</string>
+								</attributeValue>
+							</attribute>
+							<attribute name="system:currentrevisionnumber" ns="rep">
+								<attributeValue
+									xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="IntValue">
+									<int>1</int>
+								</attributeValue>
+							</attribute>
+							<attribute name="user:seiban" ns="rep">
+								<attributeValue
+									xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="StringValue">
+									<string>HV2010178</string>
+								</attributeValue>
+							</attribute>
+							<attribute name="system:name" ns="rep">
+								<attributeValue
+									xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="StringValue">
+									<string>HV2010178</string>
+								</attributeValue>
+							</attribute>
+							<attribute name="system:statuschangedby" ns="rep">
+								<attributeValue
+									xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="RmsObjectValueRmsObject">
+									<rmsObject>
+										<id>rms:nimid:11:3db5-0000000021</id>
+										<objectClass name="user">
+											<label lang="en">User</label>
+										</objectClass>
+										<attributes>
+											<attribute lang="ja" name="displayName" ns="rms">
+												<attributeValue xsi:type="StringValue">
+													<string>&#x5409;&#x6fa4;&#x3000;&#x307f;&#x3086;&#x304d;</string>
+												</attributeValue>
+											</attribute>
+											<attribute name="rmsMailable" ns="rms">
+												<attributeValue xsi:type="BooleanValue">
+													<boolean>true</boolean>
+												</attributeValue>
+											</attribute>
+											<attribute name="givenName" ns="rms">
+												<attributeValue xsi:type="StringValue">
+													<string>&#x307f;&#x3086;&#x304d;</string>
+												</attributeValue>
+											</attribute>
+											<attribute name="displayName" ns="rms">
+												<attributeValue xsi:type="StringValue">
+													<string>&#x5409;&#x6fa4;&#x3000;&#x307f;&#x3086;&#x304d;</string>
+												</attributeValue>
+											</attribute>
+											<attribute name="uid" ns="rms">
+												<attributeValue xsi:type="StringValue">
+													<string>m_yoshizawa</string>
+												</attributeValue>
+											</attribute>
+											<attribute name="sn" ns="rms">
+												<attributeValue xsi:type="StringValue">
+													<string>&#x5409;&#x6fa4;</string>
+												</attributeValue>
+											</attribute>
+											<attribute name="cn" ns="rms">
+												<attributeValue xsi:type="StringValue">
+													<string>&#x5409;&#x6fa4;&#x3000;&#x307f;&#x3086;&#x304d;</string>
+												</attributeValue>
+											</attribute>
+											<attribute name="rmsUserRoleIDs" ns="rms">
+												<attributeValue xsi:type="StringValues">
+													<strings>nimid:13:3db5-000000004a</strings>
+													<strings>nimid:13:3db5-0000000039</strings>
+													<strings>nimid:13:3db5-0000000050</strings>
+													<strings>nimid:13:3db5-00000002c5</strings>
+												</attributeValue>
+											</attribute>
+											<attribute name="rmsCardID" ns="rms">
+												<attributeValue xsi:type="StringValues"/>
+											</attribute>
+										</attributes>
+										<dn>uid=m_yoshizawa,ou=users,dc=ArcSuite</dn>
+									</rmsObject>
+								</attributeValue>
+							</attribute>
+							<attribute name="system:archivalpreservestatus" ns="rep">
+								<attributeValue
+									xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="I18nStringValue">
+									<i18nString name="system:noarchivalpreservation" ns="rep">
+										<label lang="en">Archival Preservation - Not Applied</label>
+										<label lang="ja">&#x30a2;&#x30fc;&#x30ab;&#x30a4;&#x30d6;&#x4fdd;&#x5b58;&#x306a;&#x3057;</label>
+									</i18nString>
+								</attributeValue>
+							</attribute>
+							<attribute name="system:modifiedon" ns="rep">
+								<attributeValue
+									xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="DateTimeValue">
+									<dateTime>2021-01-05T01:04:17.000Z</dateTime>
+								</attributeValue>
+							</attribute>
+							<attribute name="user:seihin" ns="rep">
+								<attributeValue
+									xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="StringValue">
+									<string>1150�250T-Motion GV</string>
+								</attributeValue>
+							</attribute>
+							<attribute name="system:colorspace" ns="rep">
+								<attributeValue
+									xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="StringValue">
+									<string>GRAY</string>
+								</attributeValue>
+							</attribute>
+							<attribute name="system:filename" ns="rep">
+								<attributeValue
+									xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="StringValue">
+									<string>HV2010178.xdw</string>
+								</attributeValue>
+							</attribute>
+							<attribute name="system:contenttype" ns="rep">
+								<attributeValue
+									xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="StringValue">
+									<string>application/vnd.fujixerox.docuworks</string>
+								</attributeValue>
+							</attribute>
+							<attribute name="system:modifiedby" ns="rep">
+								<attributeValue
+									xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="RmsObjectValueRmsObject">
+									<rmsObject>
+										<id>rms:nimid:11:3db5-0000000021</id>
+										<objectClass name="user">
+											<label lang="en">User</label>
+										</objectClass>
+										<attributes>
+											<attribute lang="ja" name="displayName" ns="rms">
+												<attributeValue xsi:type="StringValue">
+													<string>&#x5409;&#x6fa4;&#x3000;&#x307f;&#x3086;&#x304d;</string>
+												</attributeValue>
+											</attribute>
+											<attribute name="rmsMailable" ns="rms">
+												<attributeValue xsi:type="BooleanValue">
+													<boolean>true</boolean>
+												</attributeValue>
+											</attribute>
+											<attribute name="givenName" ns="rms">
+												<attributeValue xsi:type="StringValue">
+													<string>&#x307f;&#x3086;&#x304d;</string>
+												</attributeValue>
+											</attribute>
+											<attribute name="displayName" ns="rms">
+												<attributeValue xsi:type="StringValue">
+													<string>&#x5409;&#x6fa4;&#x3000;&#x307f;&#x3086;&#x304d;</string>
+												</attributeValue>
+											</attribute>
+											<attribute name="uid" ns="rms">
+												<attributeValue xsi:type="StringValue">
+													<string>m_yoshizawa</string>
+												</attributeValue>
+											</attribute>
+											<attribute name="sn" ns="rms">
+												<attributeValue xsi:type="StringValue">
+													<string>&#x5409;&#x6fa4;</string>
+												</attributeValue>
+											</attribute>
+											<attribute name="cn" ns="rms">
+												<attributeValue xsi:type="StringValue">
+													<string>&#x5409;&#x6fa4;&#x3000;&#x307f;&#x3086;&#x304d;</string>
+												</attributeValue>
+											</attribute>
+											<attribute name="rmsUserRoleIDs" ns="rms">
+												<attributeValue xsi:type="StringValues">
+													<strings>nimid:13:3db5-000000004a</strings>
+													<strings>nimid:13:3db5-0000000039</strings>
+													<strings>nimid:13:3db5-0000000050</strings>
+													<strings>nimid:13:3db5-00000002c5</strings>
+												</attributeValue>
+											</attribute>
+											<attribute name="rmsCardID" ns="rms">
+												<attributeValue xsi:type="StringValues"/>
+											</attribute>
+										</attributes>
+										<dn>uid=m_yoshizawa,ou=users,dc=ArcSuite</dn>
+									</rmsObject>
+								</attributeValue>
+							</attribute>
+							<attribute name="system:contentlabellist" ns="rep">
+								<attributeValue
+									xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="I18nStringValues">
+									<i18nStrings name="system:primary" ns="rep">
+										<label lang="en">Primary</label>
+										<label lang="ja">&#x30d7;&#x30e9;&#x30a4;&#x30de;&#x30ea;&#x30fc;</label>
+									</i18nStrings>
+									<i18nStrings name="system:view" ns="rep">
+										<label lang="en">View</label>
+										<label lang="ja">&#x30a4;&#x30f3;&#x30c7;&#x30c3;&#x30af;&#x30b9;</label>
+									</i18nStrings>
+									<i18nStrings name="system:nail" ns="rep">
+										<label lang="en">Thumbnail</label>
+										<label lang="ja">&#x5168;&#x30da;&#x30fc;&#x30b8;&#x30b5;&#x30e0;&#x30cd;&#x30a4;&#x30eb;</label>
+									</i18nStrings>
+									<i18nStrings name="system:text" ns="rep">
+										<label lang="en">Text</label>
+										<label lang="ja">&#x30c6;&#x30ad;&#x30b9;&#x30c8;</label>
+									</i18nStrings>
+									<i18nStrings name="system:topnail" ns="rep">
+										<label lang="en">Top Page Thumbnail</label>
+										<label lang="ja">&#x5148;&#x982d;&#x30da;&#x30fc;&#x30b8;&#x30b5;&#x30e0;&#x30cd;&#x30a4;&#x30eb;</label>
+									</i18nStrings>
+								</attributeValue>
+							</attribute>
+							<attribute name="system:createdon" ns="rep">
+								<attributeValue
+									xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="DateTimeValue">
+									<dateTime>2021-01-05T01:04:14.000Z</dateTime>
+								</attributeValue>
+							</attribute>
+							<attribute name="system:ftsstatus" ns="rep">
+								<attributeValue
+									xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="I18nStringValue">
+									<i18nString name="system:indexentryupdated" ns="rep">
+										<label lang="en">Index Entry Updated</label>
+										<label lang="ja">&#x30a4;&#x30f3;&#x30c7;&#x30c3;&#x30af;&#x30b9;&#x30a8;&#x30f3;&#x30c8;&#x30ea;&#x30fc;&#x66f4;&#x65b0;&#x5b8c;&#x4e86;</label>
+									</i18nString>
+								</attributeValue>
+							</attribute>
+							<attribute name="user:kouban" ns="rep">
+								<attributeValue
+									xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="StringValue">
+									<string>202101-39-2001-02</string>
+								</attributeValue>
+							</attribute>
+							<attribute name="system:ftsdate" ns="rep">
+								<attributeValue
+									xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="DateTimeValue">
+									<dateTime>2021-01-05T03:50:47.000Z</dateTime>
+								</attributeValue>
+							</attribute>
+							<attribute name="system:objecttype" ns="rep">
+								<attributeValue
+									xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="I18nStringValue">
+									<i18nString name="system:document" ns="rep">
+										<label lang="en">Document</label>
+										<label lang="ja">&#x30c9;&#x30ad;&#x30e5;&#x30e1;&#x30f3;&#x30c8;</label>
+									</i18nString>
+								</attributeValue>
+							</attribute>
+							<attribute name="system:pageheight" ns="rep">
+								<attributeValue
+									xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="DoubleValue">
+									<double>297.17999267578125</double>
+								</attributeValue>
+							</attribute>
+							<attribute name="system:rdsstatus" ns="rep">
+								<attributeValue
+									xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="I18nStringValue">
+									<i18nString name="system:indexentrynone" ns="rep">
+										<label lang="en">Index Entry None</label>
+										<label lang="ja">&#x30a4;&#x30f3;&#x30c7;&#x30c3;&#x30af;&#x30b9;&#x30a8;&#x30f3;&#x30c8;&#x30ea;&#x30fc;&#x306a;&#x3057;</label>
+									</i18nString>
+								</attributeValue>
+							</attribute>
+						</attributes>
+					</repositoryObject>
+				</searchRepositoryObjectsReturn>
+			</searchRepositoryObjectsResponse>
+		</soap:Body>
+	</soap:Envelope>
+--uuid:146cb563-8de6-4b8d-ad08-3440ea99400d--`

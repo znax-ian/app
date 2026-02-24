@@ -1,0 +1,19 @@
+
+木村　裕二: rms:nimid:11:3db5-00000001fd
+倉持　絵莉花: rms:nimid:11:3db5-00000001c1
+清水　佳純:rms:nimid:11:3db5-0000000022
+吉澤　みゆき: rms:nimid:11:3db5-0000000021
+石浜　美由樹: rms:nimid:11:3db5-0000000301
+深谷　亜希子: rms:nimid:11:3db5-0000000275
+
+検索対象
+11_図面: ARCSVTEX:11_ZUMEN_CAB
+12_設計書庫: ARCSVTEX:12_DOCUMENT_CAB
+13_重要開発案件: ARCSVTEX:13_JYUYOKAIHATSU_CAB
+21_品証書庫: ARCSVTEX:21_HINSHO_CAB
+31_製造書庫: ARCSVTEX:31_SEIZOU_CAB
+
+
+登録者: system:createdby
+最終状態変更者: system:statuschangedby
+最終変更者: system:modifiedby

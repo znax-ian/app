@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+            <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP 
+            <meta
+            http-equiv="Content-Security-Policy"
+            content="default-src 'self'; script-src 'self'"
+            />
+            <meta
+            http-equiv="X-Content-Security-Policy"
+            content="default-src 'self'; script-src 'self'"
+            />-->
+        <title>AcrSuite記録検索</title>
+        <link rel="stylesheet" href="jquery-ui.css">
+        <link rel="stylesheet" href="styles.css">
+        <script src="jquery-3.7.1.js"></script>
+        <script src="jquery-ui.js"></script>
+        <script src="init-datepicker.js"></script>
+    </head>
+    <body>
+        <div class="search-region">
+            <div class="control-item">
+                <label for="regionSelect">検索範囲:</label>
+                <select id="regionSelect" name="region">
+                    <option value="ARCSVTEX:11_ZUMEN_CAB">11_図面</option>
+                    <option value="ARCSVTEX:12_DOCUMENT_CAB">12_設計書庫</option>
+                    <option value="ARCSVTEX:13_JYUYOKAIHATSU_CAB">13_重要開発案件</option>
+                    <option value="ARCSVTEX:21_HINSHO_CAB">21_品証書庫</option>
+                    <option value="ARCSVTEX:31_SEIZOU_CAB">31_製造書庫</option>
+                </select>
+            </div>
+        </div>
+        <div class="search-user">
+            <div class="control-item">
+                <label for="userSelect">検索対象:</label>
+                <select id="userSelect" name="user">
+                    <option value="rms:nimid:11:3db5-0000000022">清水 佳純</option>
+                    <option value="rms:nimid:11:3db5-0000000021">吉澤 みゆき</option>
+                    <option value="rms:nimid:11:3db5-0000000301">石浜 美由樹</option>
+                    <option value="rms:nimid:11:3db5-0000000275">深谷 亜希子</option>
+                </select>
+            </div>
+            <div class="control-item">
+                <span>役割:</span>
+                <label><input type="radio" name="searchRole" value="system:createdby" checked>登録者</label>
+                <label><input type="radio" name="searchRole" value="system:statuschangedby">最終状態変更者</label>
+                <label><input type="radio" name="searchRole" value="system:modifiedby">最終変更者</label>
+            </div>
+        </div>
+        <div class="date-inputs">
+            <div class="date-item date-toggle">
+                <input type="checkbox" id="enableDates" aria-label="期間指定">
+                <label for="enableDates">期間指定:</label>
+            </div>
+            <div class="control-item">
+                <span>種類:</span>
+                <label><input type="radio" name="dateType" value="system:createdon" checked>登録日</label>
+                <label><input type="radio" name="dateType" value="system:statuschangedon">最終状態変更日</label>
+                <label><input type="radio" name="dateType" value="system:modifiedon">最終変更日</label>
+            </div>
+            <div class="date-item" id="startItem"><input type="text" id="startDate" placeholder="開始日"><label for="startDate">から</label></div>
+            <div class="date-item" id="endItem"><input type="text" id="endDate" placeholder="終了日"><label for="endDate">まで</label></div>
+            <div class="date-item"><button class="search_button" onclick="docSearch()">検索</button></div>
+        </div>
+        <div id='spreadsheet'></div>
+        <script>
+            function docSearch() {
+                const region = document.getElementById('regionSelect').value;
+                const role = document.querySelector('input[name="searchRole"]:checked').value;
+                const dateAttr = document.querySelector('input[name="dateType"]:checked').value;
+                const user = document.getElementById('userSelect').value;
+                const enabled = document.getElementById('enableDates').checked;
+                const startDate = enabled && document.getElementById('startDate').value ? document.getElementById('startDate').value + 'T00:00:00.000Z' : null;
+                const endDate = enabled && document.getElementById('endDate').value ? document.getElementById('endDate').value + 'T00:00:00.000Z' : null;
+
+                const searchParams = {
+                    region: region,
+                    role: role,
+                    dateAttr: dateAttr,
+                    user: user,
+                    enabledDates: enabled,
+                    startDate: startDate,
+                    endDate: endDate
+                };
+
+                return searchParams;
+            }
+
+            function toggleDateInputs(enabled) {
+                const start = document.getElementById('startDate');
+                const end = document.getElementById('endDate');
+                const startItem = document.getElementById('startItem');
+                const endItem = document.getElementById('endItem');
+                start.disabled = !enabled;
+                end.disabled = !enabled;
+                if (!enabled) {
+                    startItem.classList.add('disabled');
+                    endItem.classList.add('disabled');
+                } else {
+                    startItem.classList.remove('disabled');
+                    endItem.classList.remove('disabled');
+                }
+            }
+
+            document.addEventListener('DOMContentLoaded', function () {
+                const cb = document.getElementById('enableDates');
+                // default: unchecked (dates disabled)
+                cb.checked = false;
+                toggleDateInputs(cb.checked);
+                cb.addEventListener('change', function () { toggleDateInputs(cb.checked); });
+            });
+        </script>
+    </body>
+</html>

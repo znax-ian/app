@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+            <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
+            <meta
+            http-equiv="Content-Security-Policy"
+            content="default-src 'self'; script-src 'self'"
+            />
+            <meta
+            http-equiv="X-Content-Security-Policy"
+            content="default-src 'self'; script-src 'self'"
+            />
+        <title>不適合記録検索</title>
+        <script src="./Scripts/jquery-3.7.1.js"></script>
+        <script src="./Scripts/jquery-ui.js"></script>
+        <script src="./Scripts/init-datepicker.js"></script>
+        <script src="./node_modules/jsuites/dist/jsuites.js"></script>
+        <script src="./node_modules/jspreadsheet-ce/dist/index.js"></script>
+        <link rel="stylesheet" href="./node_modules/jspreadsheet-ce/dist/jspreadsheet.css" type="text/css" />
+        <link rel="stylesheet" href="./node_modules/jsuites/dist/jsuites.css" type="text/css" />
+        <link rel="stylesheet" href="./Style/jquery-ui.css">
+        <link rel="stylesheet" href="./Style/styles.css">
+    </head>
+    <body>
+        <div class="search-region">
+            <div class="control-item">
+                <label for="regionSelect">検索範囲:</label>
+                <select id="regionSelect" name="region">
+                    <option value="rep:ARCSVTEX:11_ZUMEN_CAB">11_図面</option>
+                    <option value="rep:ARCSVTEX:12_DOCUMENT_CAB">12_設計書庫</option>
+                    <option value="rep:ARCSVTEX:13_JYUYOKAIHATSU_CAB">13_重要開発案件</option>
+                    <option value="rep:ARCSVTEX:21_HINSHO_CAB" selected>21_品証書庫</option>
+                    <option value="rep:ARCSVTEX:31_SEIZOU_CAB">31_製造書庫</option>
+                </select>
+            </div>
+        </div>
+        <div class="search-user">
+            <div class="control-item">
+                <label for="userSelect">検索対象:</label>
+                <select id="userSelect" name="user">
+                    <option value="rms:nimid:11:3db5-0000000022">清水 佳純</option>
+                    <option value="rms:nimid:11:3db5-0000000021">吉澤 みゆき</option>
+                    <option value="rms:nimid:11:3db5-0000000301" selected>石浜 美由樹</option>
+                    <option value="rms:nimid:11:3db5-0000000275">深谷 亜希子</option>
+                    <option value="rms:nimid:11:3db5-0000000261">西丸 由加</option>
+                </select>
+            </div>
+            <div class="control-item">
+                <span>役割:</span>
+                <fieldset id="roleSelect">
+                    <label><input type="radio" name="searchRole" value="system:createdby" >登録者</label>
+                    <label><input type="radio" name="searchRole" value="system:statuschangedby">最終状態変更者</label>
+                    <label><input type="radio" name="searchRole" value="system:modifiedby" checked>最終変更者</label>
+                </fieldset>
+            </div>
+        </div>
+        <div class="date-inputs">
+            <div class="control-item">
+                <span>期間指定:</span>
+                <fieldset id="periodSelect">
+                    <label><input type="radio" name="dateType" value="system:createdon" >登録日</label>
+                    <label><input type="radio" name="dateType" value="system:statuschangedon">最終状態変更日</label>
+                    <label><input type="radio" name="dateType" value="system:modifiedon" checked>最終変更日</label>
+                </fieldset>
+            </div>
+            <div class="date-item" id="startItem"><input type="text" id="startDate" placeholder="開始日"><label for="startDate">から</label></div>
+            <div class="date-item" id="endItem"><input type="text" id="endDate" placeholder="終了日"><label for="endDate">まで</label></div>
+            <div class="date-item"><button id="search_button" class="search_button" >検索</button></div>
+            <div class="date-item"><button id="delete_button" class="search_button" >クリア</button></div>
+        </div>
+        <div id='spreadsheet'></div>
+        <div id="loading-overlay">
+        <div class="spinner"></div>
+        <div class="loading-text">検索中...</div>
+    </div>
+        <script src="renderer.js"></script>
+    </body>
+</html>
