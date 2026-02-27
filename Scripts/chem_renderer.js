@@ -1,0 +1,89 @@
+async function productQuery() {
+
+    const loadingOverlay = document.getElementById('loading-overlay');
+    loadingOverlay.style.display = 'flex';
+    try{
+        drawing = document.getElementById('productCode').value;
+
+        const result = await window.electronAPI.productQuery(drawing);
+
+        if (result.success) {
+            document.getElementById('spreadsheet').innerHTML = ''; // Clear old table
+            jspreadsheet(document.getElementById('spreadsheet'), {
+                worksheets: [{
+                    worksheetName: '部品表',
+                    data: result.BOM,
+                    defaultColAlign: 'left',
+                    selectionCopy: false,
+                    copyCompatibility: false,
+                    columns: [
+                        { type: 'text', title: '図番', name: '図番', width: 100 },
+                        { type: 'text', title: '品番', name: '品番', width: 35 },
+                        { type: 'text', title: '枝番', name: '枝番', width: 35 },
+                        { type: 'text', title: '品目コード', name: '品目コード', width: 180 },
+                        { type: 'text', title: '部品名', name: '部品名', width: 200 },
+                        { type: 'text', title: '英語名称', name: '英語名称', width: 200 },
+                        { type: 'text', title: '材質', name: '材質', width: 150 },
+                        { type: 'text', title: 'サイズ・タイプ', name: 'サイズ・タイプ', width: 200 },
+                        { type: 'text', title: '記事', name: '記事', width: 200 },
+                        { type: 'text', title: 'chemSHERPA', name: 'Version', width: 120 }
+                    ]
+
+                },
+                {
+                    worksheetName: '化学成分',
+                    data: result.SUBS,
+                    defaultColAlign: 'left',
+                    selectionCopy: false,
+                    copyCompatibility: false,
+                    columnSorting: false,
+                    freezeColumns: 1,
+                    filters: true,
+                    columns: [
+                        { type: 'text', title: '品目コード', name: 'itemCode', width: 180 },
+                        { type: 'text', title: '部品名', name: 'jpartsName', width: 100 },
+                        { type: 'hidden', name: 'epartsName', width: 150 },
+                        { type: 'text', title: '構成番号', name: 'level', width: 50 },
+                        { type: 'text', title: '構成部品番号', name: 'id', width: 150 },
+                        { type: 'text', title: '構成部品名称', name: 'partsName', width: 150 },
+                        { type: 'text', title: '質量', name: 'partsMass', width: 150 },
+                        { type: 'text', title: '単位', name: 'partsUnit', width: 150 },
+                        { type: 'text', title: '物質', name: 'matlName', width: 150 },
+                        { type: 'text', title: '用途', name: 'matlPurp', width: 150 },
+                        { type: 'text', title: '質量', name: 'matlMass', width: 150 },
+                        { type: 'text', title: '単位', name: 'matlUnit', width: 150 },
+                        { type: 'text', title: '分類記号', name: 'matlId', width: 150 },
+                        { type: 'text', title: '物質名', name: 'subsName', width: 150 },
+                        { type: 'text', title: '濃度(%)', name: 'subsConc', width: 150 },
+                        { type: 'text', title: 'CAS NO', name: 'subsCas', width: 150 },
+                        { type: 'text', title: 'REACH', name: 'reach', width: 150 },
+                        { type: 'text', title: 'RoHS', name: 'rohs', width: 150 },
+                        { type: 'text', title: 'C.RoHS', name: 'crohs', width: 150 },
+                        { type: 'text', title: 'TSCA', name: 'tsca', width: 150 },
+                        { type: 'text', title: '規制対象', name: 'target', width: 150 },
+                        { type: 'text', title: '規制名', name: 'rules', width: 150 },
+                        { type: 'text', title: '閾値', name: 'thresholds', width: 150 },
+                        { type: 'text', title: '判定', name: 'compliance', width: 150 }
+                    ],
+                    nestedHeaders:[
+                        [
+                            { title: '部品表', colspan: '2' },
+                            { title: 'chemSHERPA情報', colspan: '17' },
+                            { title: 'TEL禁止物質', colspan: '4' }
+                        ]
+                    ]
+                }]});
+        } else {
+            alert("部品表が見つかりませんでした: " + result.message);
+        }
+    } catch (error) {
+        console.error("製品クエリエラー:", error);
+        alert("部品表の検索中にエラーが発生しました: " + error.message);
+    } finally {
+        loadingOverlay.style.display = 'none';
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+    document.getElementById('product_search').addEventListener('click', productQuery);
+});

@@ -222,11 +222,25 @@ function deleteContent() {
     document.getElementById('periodSelect').disabled = false;
 }
 
+
 // Attach to button after DOM is ready
 document.addEventListener('DOMContentLoaded', function () {
-    const btn = document.getElementById('search_button');
-    if (btn) btn.addEventListener('click', docSearch);
-    const deleteBtn = document.getElementById('delete_button');
-    if (deleteBtn) deleteBtn.addEventListener('click', deleteContent);
+    //const btn = document.getElementById('search_button');
+    //if (btn) btn.addEventListener('click', docSearch);
+    document.getElementById('search_button').addEventListener('click', docSearch);
+    document.getElementById('delete_button').addEventListener('click', deleteContent);
+    //const deleteBtn = document.getElementById('delete_button');
+    //if (deleteBtn) deleteBtn.addEventListener('click', deleteContent);
 });
+
+(async function initAuthGuard() {
+    // Check if we are on a page that requires login (like nonconformity.html)
+    // and if credentials actually exist in the background process
+    const isReady = await window.electronAPI.checkCredentials();
+
+    if (!isReady) {
+        // Redirect to login if CONFIG is empty
+        window.location.href = 'arclogin.html';
+    }
+})();
 

@@ -1,14 +1,14 @@
+require('dotenv').config();
 const sql = require('mssql');
 const xml2js = require('xml2js');
 const parser = new xml2js.Parser({ explicitArray: false });
-const drawing = 'I16044';
+//const drawing = 'I16044';
 const BOM = [];
 let counter = 0;
 const config = {
-    user: 'sa',
-    password: 'vtex1263SQL!',
-    server: 'SQL15-VTEX\\VTEXBASE',
-    //database: 'VTEX_CHEM',
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    server: process.env.DB_SERVER,
     options: {
         encrypt: false,
         trustServerCertificate: true
@@ -18,6 +18,8 @@ const config = {
 function makeComp(){
     return {
         itemCode: null,
+        jpartsName: null,
+        epartsName: null,
         layer: null,
         level:null,
         id:null,
@@ -41,6 +43,8 @@ function makeComp(){
 function explore(sub,layer,table,precomp){
     let comp = makeComp();
     comp.itemCode = precomp.itemCode;
+    comp.jpartsName = precomp.jpartsName;
+    comp.epartsName = precomp.epartsName;
     if(counter === 0){
         comp.id = sub.ProductID.$.identifier || precomp.identifier;
         counter++;
@@ -105,7 +109,7 @@ function getMaterial(sub,comp,table){
 }
 
 function getSubstance(sub,comp,table){
-    comp.subsName = sub.$.name;
+    comp.subsName = sub.$.name.substring(0,150);
     comp.subsCas = sub.SubstanceID.EntryID.$.entryIdentity;
     comp.subsConc = sub.MassPercent.$.massPercent;
     if(!sub.Exemptions){
@@ -144,9 +148,11 @@ function getExemption(sub,comp){
     if(identity.includes('TSCA')){comp.tsca = sub.Exemption.$.regIndex};    
 }
 
-function parseComp(parts,itemcode){
+function parseComp(parts,itemcode, japaneseName, englishName){
     return {
         itemCode:itemcode,
+        jpartsName:japaneseName,
+        epartsName:englishName,
         name:parts.Main.Product.ProductID.$.name,
         identifier: parts.Main.Product.ProductID.$.identifier
     }
@@ -155,6 +161,8 @@ function parseComp(parts,itemcode){
 function insert(table,comp){
     table.rows.add(
         comp.itemCode,
+        comp.jpartsName,
+        comp.epartsName,
         comp.level,
         comp.id,
         comp.partsName,
@@ -175,56 +183,52 @@ function insert(table,comp){
     )
 }
 
-(async () => {
+async function getProductDetail(drawing) {
     let pool = null;
     try{
         pool = await sql.connect(config);
         const table = new sql.Table('#temptable');
         table.create = true;
         table.temporary = true;
-        table.columns.add('itemCode',sql.NVarChar(150),{nullable: true}); //itemcode
-        table.columns.add('level',sql.NVarChar(150),{nullable: true}); //itemcode
-        table.columns.add('id',sql.NVarChar(150),{nullable: true}); //identifier
-        table.columns.add('partsName',sql.NVarChar(150),{nullable: true});
-        table.columns.add('partsMass',sql.NVarChar(150),{nullable: true});
-        table.columns.add('partsUnit',sql.NVarChar(150),{nullable: true});
-        table.columns.add('matlName',sql.NVarChar(150),{nullable: true});
-        table.columns.add('matlPurp',sql.NVarChar(150),{nullable: true});
-        table.columns.add('matlMass',sql.NVarChar(150),{nullable: true});
-        table.columns.add('matlUnit',sql.NVarChar(150),{nullable: true});
-        table.columns.add('matlId',sql.NVarChar(150),{nullable: true});
-        table.columns.add('subsName',sql.NVarChar(1024),{nullable: true});
-        table.columns.add('subsConc',sql.NVarChar(150),{nullable: true});
-        table.columns.add('subsCas',sql.NVarChar(150),{nullable: true});
-        table.columns.add('reach',sql.NVarChar(150),{nullable: true});
-        table.columns.add('rohs',sql.NVarChar(150),{nullable: true});
-        table.columns.add('crohs',sql.NVarChar(150),{nullable: true});
-        table.columns.add('tsca',sql.NVarChar(150),{nullable: true});
+        table.columns.add('itemCode',sql.NVarChar(200),{nullable: true}); //itemcode
+        table.columns.add('jpartsName',sql.NVarChar(200),{nullable: true}); //parts name in Japanese, for display only
+        table.columns.add('epartsName',sql.NVarChar(200),{nullable: true}); //parts name in English, for display only
+        table.columns.add('level',sql.NVarChar(200),{nullable: true}); //level
+        table.columns.add('id',sql.NVarChar(200),{nullable: true}); //identifier
+        table.columns.add('partsName',sql.NVarChar(200),{nullable: true});
+        table.columns.add('partsMass',sql.NVarChar(200),{nullable: true});
+        table.columns.add('partsUnit',sql.NVarChar(200),{nullable: true});
+        table.columns.add('matlName',sql.NVarChar(200),{nullable: true});
+        table.columns.add('matlPurp',sql.NVarChar(200),{nullable: true});
+        table.columns.add('matlMass',sql.NVarChar(200),{nullable: true});
+        table.columns.add('matlUnit',sql.NVarChar(200),{nullable: true});
+        table.columns.add('matlId',sql.NVarChar(200),{nullable: true});
+        table.columns.add('subsName',sql.NVarChar(200),{nullable: true});
+        table.columns.add('subsConc',sql.NVarChar(200),{nullable: true});
+        table.columns.add('subsCas',sql.NVarChar(200),{nullable: true});
+        table.columns.add('reach',sql.NVarChar(200),{nullable: true});
+        table.columns.add('rohs',sql.NVarChar(200),{nullable: true});
+        table.columns.add('crohs',sql.NVarChar(200),{nullable: true});
+        table.columns.add('tsca',sql.NVarChar(200),{nullable: true});
         
+        const V2R1 = await pool.request().query(`
+            WITH temp AS (
+            SELECT CASE WHEN BOM.品目コード = Grease.EN THEN Grease.ItemCode ELSE BOM.品目コード END AS 品目コード, 図番, 品番, 枝番, 部品名, 材質, [サイズ・タイプ], 記事
+            FROM VTEX_DWH.dbo.Q_部品表検索用 BOM
+            LEFT JOIN VTEX_CHEM.dbo.Grease ON Grease.EN = BOM.品目コード
+            WHERE 製品コード = '${drawing}')
+            SELECT 図番, 品番,枝番, TMP.品目コード, PAR.部品名, PAR.英語名称, TMP.材質, TMP.[サイズ・タイプ], TMP.記事, LCH.[Version], LCH.Xmlfiles
+            FROM temp AS TMP
+            LEFT JOIN (
+            SELECT ItemCode, Xmlfiles, [Version],
+                    ROW_NUMBER() OVER (PARTITION BY ItemCode ORDER BY [Version] DESC) AS RowNum
+                FROM VTEX_CHEM.dbo.T_chemFiles
+            ) LCH ON LCH.ItemCode = TMP.品目コード AND RowNum = 1
+             LEFT JOIN VTEX_DWH.dbo.部品台帳 PAR ON TMP.品目コード = PAR.品目コード
+            ORDER BY 品番, 枝番`);
         
-        /*
-        const V2R1 = await pool.request().query("\
-            SELECT 品目コード正規, Xmlfiles \
-            FROM VTEX_DWH.dbo.Q_部品表検索用 BOM \
-            LEFT JOIN VTEX_DWH.dbo.部品台帳 PAR ON BOM.品目コード = PAR.品目コード \
-            LEFT JOIN VTEX_CHEM.dbo.T_chemFiles CHM ON BOM.品目コード = CHM.ItemCode \
-            WHERE 製品コード = '" + drawing + "'")*/
-        
-        const V2R1 = await pool.request().query("\
-            WITH temp AS ( \
-            SELECT CASE WHEN BOM.品目コード = Grease.EN THEN Grease.ItemCode ELSE BOM.品目コード END AS 品目コード \
-            FROM VTEX_DWH.dbo.Q_部品表検索用 BOM \
-            LEFT JOIN VTEX_CHEM.dbo.Grease ON Grease.EN = BOM.品目コード \
-            WHERE 製品コード = '" + drawing + "') \
-            SELECT 品目コード, LCH.Xmlfiles, LCH.[Version] \
-            FROM temp \
-            LEFT JOIN ( \
-            SELECT ItemCode, Xmlfiles, [Version], \
-                    ROW_NUMBER() OVER (PARTITION BY ItemCode ORDER BY [Version] DESC) AS RowNum \
-                FROM VTEX_CHEM.dbo.T_chemFiles \
-            ) LCH ON LCH.ItemCode = temp.品目コード AND RowNum = 1");
-        
-        const V2R1ForUI = V2R1.recordset.map(row => {
+        // BOM for jspreadsheet
+        const BOM4JSS = V2R1.recordset.map(row => {
             const { Xmlfiles, ...displayData } = row;
             return displayData;
         });
@@ -234,9 +238,11 @@ function insert(table,comp){
                 if(V2R1.recordset[i].Xmlfiles){
                     const V2R1xml = await parser.parseStringPromise(V2R1.recordset[i].Xmlfiles);
                     const itemcode = V2R1.recordset[i]["品目コード"];
+                    const japaneseName = V2R1.recordset[i]["部品名"];
+                    const englishName = V2R1.recordset[i]["英語名称"];
                     //console.log(itemcode);
                     if(!BOM.includes(itemcode)){
-                        const preComp = parseComp(V2R1xml,itemcode);
+                        const preComp = parseComp(V2R1xml,itemcode, japaneseName, englishName);
                         const composition = V2R1xml.Main.Product.Composition;
                         let parts = null;
                         if(composition){
@@ -258,14 +264,14 @@ function insert(table,comp){
         }else{
             console.log('部品表見つかりません');
             if(pool) await pool.close();
-            return;
+            return {success: false, BOM: [], SUBS: [], message: '部品表見つかりません'};
         }
 
         await pool.request().bulk(table);
-        console.log('Bulk insert done');
+        //console.log('Bulk insert done');
         //const result = await pool.request().query("SELECT * FROM #temptable");
         const result = await pool.request().query("\
-            SELECT itemCode,level,id,partsName,partsMass,partsUnit,matlName,matlPurp,matlMass,matlUnit,matlId,subsName,subsConc,subsCas,reach,rohs,crohs,tsca, \
+            SELECT itemCode,jpartsName,epartsName,level,id,partsName,partsMass,partsUnit,matlName,matlPurp,matlMass,matlUnit,matlId,subsName,subsConc,subsCas,reach,rohs,crohs,tsca, \
             TELS.targets AS target, TELS.rules AS rules, \
             CAST(TELS.ppb AS FLOAT) / 10000000 AS thresholds, \
             CASE \
@@ -280,13 +286,15 @@ function insert(table,comp){
                 LEFT JOIN VTEX_CHEM.dbo.M_TEL TELM ON TELM.Types = TEL.Groups \
                 LEFT JOIN VTEX_CHEM.dbo.M_TEL TELK ON TELK.Types = TEL.Targets) AS TELS ON TELS.CAS_NO = TMP.subsCas \
             ORDER BY itemCode, level, id ASC");
-        const csv = new ObjectsToCsv(result.recordset);
-        await csv.toDisk(`${drawing}.csv`);
+
+        return {success: true, BOM: BOM4JSS, SUBS: result.recordset, message: ''};
 
     }catch(err){
         if(pool) await pool.close();
-        console.error('Error:', err);
+        return {success: false, BOM: [], SUBS: [], message: err.message};
     }finally{
         if(pool) await pool.close();
     }
-})();
+};
+
+module.exports = { getProductDetail };

@@ -18,3 +18,12 @@ form.addEventListener('submit', async function(e) {
         errorMsg.style.display = 'block';
     }
 });
+/*
+const hamburger = document.getElementById("hamburger");
+const sideMenu = document.getElementById("sideMenu");
+
+hamburger.addEventListener("click", () => {
+    hamburger.classList.toggle("active");
+    sideMenu.classList.toggle("open");
+});*/
+

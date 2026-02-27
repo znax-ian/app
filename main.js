@@ -1,6 +1,7 @@
 const { app, BrowserWindow, ipcMain, Menu, clipboard } = require('electron')
 const path = require('path');
 const arcsuite = require('./Scripts/arcsuite.js'); // Import the function from arcsuite.js
+const productQuery = require('./Scripts/productQuery.js'); // Import the function from productQuery.js
 
 const createWindow = () => {
     //Menu.setApplicationMenu(null);
@@ -12,7 +13,7 @@ const createWindow = () => {
             preload: path.join(__dirname, 'preload.js')
         }
     });
-    win.loadFile('arclogin.html');
+    win.loadFile('main.html');
     win.on('blur', () => {
     clipboard.writeText("");
     });
@@ -49,6 +50,24 @@ app.whenReady().then(() => {
             console.error("Login Error:", error);
             return { success: false, error: error.message };
         }
+    });
+
+    ipcMain.handle('product-query', async (event, drawing) => {
+        try {
+            const productResult = await productQuery.getProductDetail(drawing);
+            if (productResult.success) {
+                return { success: true, BOM: productResult.BOM, SUBS: productResult.SUBS, message: productResult.message };
+            } else {
+                return { success: false, BOM: [], SUBS: [], message: productResult.message || '部品表見つかりません' };
+            }   
+        }catch (error) {
+            console.error("Product Query Error:", error);
+            return { success: false, BOM: [], SUBS: [], message: error.message || 'エラーが発生しました' };
+        }
+    });
+
+    ipcMain.handle('check-credentials', () => {
+        return arcsuite.hasCredentials();
     });
 
     createWindow()

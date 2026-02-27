@@ -40,11 +40,11 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "ArcSuite Test",
+            "name": "Product",
             "skipFiles": [
                 "<node_internals>/**"
             ],
-            "program": "${workspaceFolder}\\arcsuiteTest.js"
+            "program": "${workspaceFolder}\\Scripts\\productQuery.js"
         }
   ]
 }

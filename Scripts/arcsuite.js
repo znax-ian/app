@@ -1,10 +1,10 @@
 const axios = require('axios');
 const crypto = require('crypto');
 const xml2js = require('xml2js');
-
+require('dotenv').config();
 // --- 1. CONFIGURATION ---
 const CONFIG = {
-    host: 'arcs-vtex.corp.vtex.local',
+    host: process.env.ARC_HOST,
     user: '',
     password: ''
 };
@@ -294,5 +294,9 @@ async function login(user, pwd) {
 
 }
 
-module.exports = { getDocList, login };
+function hasCredentials() {
+    return CONFIG.user.length > 0 && CONFIG.password.length > 0;
+}
+
+module.exports = { getDocList, login, hasCredentials };
 

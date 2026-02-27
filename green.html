@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+            <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
+            <meta
+            http-equiv="Content-Security-Policy"
+            content="default-src 'self'; script-src 'self'"
+            />
+            <meta
+            http-equiv="X-Content-Security-Policy"
+            content="default-src 'self'; script-src 'self'"
+            />
+        <title>グリーン調査</title>
+        <script src="./node_modules/jsuites/dist/jsuites.js"></script>
+        <script src="./node_modules/jspreadsheet-ce/dist/index.js"></script>
+        <link rel="stylesheet" href="./node_modules/jspreadsheet-ce/dist/jspreadsheet.css" type="text/css" />
+        <link rel="stylesheet" href="./node_modules/jsuites/dist/jsuites.css" type="text/css" />
+        <link rel="stylesheet" href="./Style/styles.css">
+    </head>
+    <body>
+        <div class="search-region">
+            <div class="control-item">
+                <label for="productCode">製品番号:</label>
+                <input type="search" id="productCode" name="q" />
+                <button id="product_search">検索</button>
+            </div>
+        </div>
+        <div id='spreadsheet'></div>
+        <div id="loading-overlay">
+        <div class="spinner"></div>
+        <div class="loading-text">検索中...</div>
+    </div>
+        <script src="./Scripts/chem_renderer.js"></script>
+    </body>
+</html>
