@@ -62,14 +62,18 @@ async function productQuery() {
                         { type: 'text', title: 'TSCA', name: 'tsca', width: 150 },
                         { type: 'text', title: '規制対象', name: 'target', width: 150 },
                         { type: 'text', title: '規制名', name: 'rules', width: 150 },
-                        { type: 'text', title: '閾値', name: 'thresholds', width: 150 },
-                        { type: 'text', title: '判定', name: 'compliance', width: 150 }
+                        { type: 'text', title: '閾値', name: 'thresholds', width: 50 },
+                        { type: 'text', title: '判定', name: 'compliance', width: 50 },
+                        { type: 'text', title: '物質群コード', name: '物質群コード', width: 150 },
+                        { type: 'text', title: '分類', name: '分類', width: 150 },
+                        { type: 'text', title: '分類名', name: 'NamesJP', width: 150 }
                     ],
                     nestedHeaders:[
                         [
                             { title: '部品表', colspan: '2' },
                             { title: 'chemSHERPA情報', colspan: '17' },
-                            { title: 'TEL禁止物質', colspan: '4' }
+                            { title: 'TEL禁止物質', colspan: '4' },
+                            { title: '日立ハイテク禁止物質', colspan: '3' }
                         ]
                     ]
                 }]});

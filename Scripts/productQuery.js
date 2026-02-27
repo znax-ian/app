@@ -268,24 +268,34 @@ async function getProductDetail(drawing) {
         }
 
         await pool.request().bulk(table);
-        //console.log('Bulk insert done');
-        //const result = await pool.request().query("SELECT * FROM #temptable");
-        const result = await pool.request().query("\
-            SELECT itemCode,jpartsName,epartsName,level,id,partsName,partsMass,partsUnit,matlName,matlPurp,matlMass,matlUnit,matlId,subsName,subsConc,subsCas,reach,rohs,crohs,tsca, \
-            TELS.targets AS target, TELS.rules AS rules, \
-            CAST(TELS.ppb AS FLOAT) / 10000000 AS thresholds, \
-            CASE \
-                WHEN TELS.ppb IS NULL THEN '' \
-                WHEN subsConc > CAST(TELS.ppb AS FLOAT) / 10000000 THEN 'X' \
-                ELSE 'O' \
-            END AS compliance \
-            FROM #temptable TMP \
-            LEFT JOIN (\
-                SELECT TELK.Contents AS targets, TELM.Contents AS rules, ppb, CAS_NO \
-                FROM VTEX_CHEM.dbo.T_Subs_TEL AS TEL \
-                LEFT JOIN VTEX_CHEM.dbo.M_TEL TELM ON TELM.Types = TEL.Groups \
-                LEFT JOIN VTEX_CHEM.dbo.M_TEL TELK ON TELK.Types = TEL.Targets) AS TELS ON TELS.CAS_NO = TMP.subsCas \
-            ORDER BY itemCode, level, id ASC");
+        const result = await pool.request().query(`
+            SELECT itemCode,jpartsName,epartsName,level,id,partsName,partsMass,partsUnit,matlName,matlPurp,matlMass,matlUnit,matlId,subsName,subsConc,subsCas,reach,rohs,crohs,tsca,
+            TELS.targets AS target, TELS.rules AS rules,
+            CAST(TELS.ppb AS FLOAT) / 10000000 AS thresholds,
+            CASE
+                WHEN TELS.ppb IS NULL THEN ''
+                WHEN subsConc > CAST(TELS.ppb AS FLOAT) / 10000000 THEN 'X'
+                ELSE 'O'
+            END AS compliance,
+            HHTS.物質群コード,
+            HHTS.分類,
+            HHTS.NamesJP
+            FROM #temptable TMP
+            LEFT JOIN (
+                SELECT TELK.Contents AS targets, TELM.Contents AS rules, ppb, CAS_NO
+                FROM VTEX_CHEM.dbo.T_Subs_TEL AS TEL
+                LEFT JOIN VTEX_CHEM.dbo.M_TEL TELM ON TELM.Types = TEL.Groups
+                LEFT JOIN VTEX_CHEM.dbo.M_TEL TELK ON TELK.Types = TEL.Targets) AS TELS ON TELS.CAS_NO = TMP.subsCas
+            LEFT JOIN (
+                SELECT CONCAT(HHT.Types,FORMAT(HHT.Groups, '000')) AS 物質群コード,
+                    CASE 
+                        WHEN HHT.Types = 'H1' THEN '禁止物質'
+                        WHEN HHT.Types = 'H2' THEN '管理物質' END AS 分類, HHT.CAS_NO, CAT.NamesJP
+                FROM [VTEX_CHEM].[dbo].[T_Subs_HitachiHT] HHT
+                LEFT JOIN VTEX_CHEM.dbo.M_HitachiHT CAT ON CONCAT(HHT.Types,FORMAT(HHT.Groups, '000')) = CONCAT(CAT.Types,FORMAT(CAT.Groups, '000'))
+                WHERE CAT.NamesJP NOT IN ('GADSL', 'chemSHERPA管理対象物質','JAMP管理対象物質','IEC62474','MDR')
+            ) AS HHTS ON HHTS.CAS_NO = TMP.subsCas
+            ORDER BY itemCode, level, id ASC`);
 
         return {success: true, BOM: BOM4JSS, SUBS: result.recordset, message: ''};
 
