@@ -28,7 +28,6 @@ async function productQuery() {
                         { type: 'text', title: '記事', name: '記事', width: 200 },
                         { type: 'text', title: 'chemSHERPA', name: 'Version', width: 120 }
                     ]
-
                 },
                 {
                     worksheetName: '化学成分',
@@ -37,7 +36,9 @@ async function productQuery() {
                     selectionCopy: false,
                     copyCompatibility: false,
                     columnSorting: false,
-                    freezeColumns: 1,
+                    tableOverflow: true,
+                    tableWidth: '100%',
+                    freezeColumns: 2,
                     filters: true,
                     columns: [
                         { type: 'text', title: '品目コード', name: 'itemCode', width: 180 },
@@ -46,12 +47,22 @@ async function productQuery() {
                         { type: 'text', title: '構成番号', name: 'level', width: 50 },
                         { type: 'text', title: '構成部品番号', name: 'id', width: 150 },
                         { type: 'text', title: '構成部品名称', name: 'partsName', width: 150 },
-                        { type: 'text', title: '質量', name: 'partsMass', width: 150 },
-                        { type: 'text', title: '単位', name: 'partsUnit', width: 150 },
+                        { type: 'text', title: '質量', name: 'partsMass', width: 150,
+                            render: function(td, value, x, y, instance){
+                                const unit = instance.getValueFromCoords(7, y)
+                                td.innerHTML = `${value}${unit}`
+                            }
+                         },
+                        { type: 'hidden', title: '単位', name: 'partsUnit', width: 150 },
                         { type: 'text', title: '物質', name: 'matlName', width: 150 },
                         { type: 'text', title: '用途', name: 'matlPurp', width: 150 },
-                        { type: 'text', title: '質量', name: 'matlMass', width: 150 },
-                        { type: 'text', title: '単位', name: 'matlUnit', width: 150 },
+                        { type: 'text', title: '質量', name: 'matlMass', width: 150,
+                            render: function(td, value, x, y, instance){
+                                const unit = instance.getValueFromCoords(11, y)
+                                td.innerHTML = `${value}${unit}`
+                            }
+                         },
+                        { type: 'hidden', title: '単位', name: 'matlUnit', width: 150 },
                         { type: 'text', title: '分類記号', name: 'matlId', width: 150 },
                         { type: 'text', title: '物質名', name: 'subsName', width: 150 },
                         { type: 'text', title: '濃度(%)', name: 'subsConc', width: 150 },
@@ -71,14 +82,14 @@ async function productQuery() {
                     nestedHeaders:[
                         [
                             { title: '部品表', colspan: '2' },
-                            { title: 'chemSHERPA情報', colspan: '17' },
+                            { title: 'chemSHERPA情報', colspan: '15' },
                             { title: 'TEL禁止物質', colspan: '4' },
                             { title: '日立ハイテク禁止物質', colspan: '3' }
                         ]
                     ]
                 }]});
         } else {
-            alert("部品表が見つかりませんでした: " + result.message);
+            alert("エラー: " + result.message);
         }
     } catch (error) {
         console.error("製品クエリエラー:", error);

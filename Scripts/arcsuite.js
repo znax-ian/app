@@ -2,7 +2,7 @@ const axios = require('axios');
 const crypto = require('crypto');
 const xml2js = require('xml2js');
 require('dotenv').config();
-// --- 1. CONFIGURATION ---
+
 const CONFIG = {
     host: process.env.ARC_HOST,
     user: '',
@@ -11,7 +11,6 @@ const CONFIG = {
 
 const BASE_URL = `http://${CONFIG.host}/ArcSuite/2006/08/ws`;
 
-// --- 2. HELPERS ---
 function createSoapEnvelope(body, sessionId = null) {
     let header = '';
     if (sessionId) header = `<soap:Header><types:Session>${sessionId}</types:Session></soap:Header>`;
@@ -51,7 +50,7 @@ async function parseXml(xmlInput, tagName) {
 }
 
 async function parseSearchResults(xmlInput, type) {
-    // 1. Clean up the MTOM/Multipart wrapper if present (keeps just the XML part)
+    // Clean up the MTOM/Multipart wrapper if present (keeps just the XML part)
     const cleanXml = (data) => {
         if (typeof data !== 'string') return data;
         const startTag = '<soap:Envelope';
@@ -66,17 +65,17 @@ async function parseSearchResults(xmlInput, type) {
 
     const xmlContent = cleanXml(xmlInput);
     
-    // 2. Parse XML
+    // Parse XML
     const parser = new xml2js.Parser({ 
         explicitArray: false, 
-        ignoreAttrs: false, // Important: We need attributes to read 'name="user:customar"'
-        tagNameProcessors: [xml2js.processors.stripPrefix] // Strips 'ns2:', 'types:' etc.
+        ignoreAttrs: false,
+        tagNameProcessors: [xml2js.processors.stripPrefix]
     });
 
     try {
         const result = await parser.parseStringPromise(xmlContent);
         
-        // 3. Navigate to the Repository Objects
+        // Navigate to the Repository Objects
         // Path: Envelope -> Body -> searchRepositoryObjectsResponse -> searchRepositoryObjectsReturn -> repositoryObject
         const body = result['Envelope']['Body'];
 

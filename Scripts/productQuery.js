@@ -2,7 +2,7 @@ require('dotenv').config();
 const sql = require('mssql');
 const xml2js = require('xml2js');
 const parser = new xml2js.Parser({ explicitArray: false });
-//const drawing = 'I16044';
+
 const BOM = [];
 let counter = 0;
 const config = {

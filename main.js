@@ -26,7 +26,7 @@ const createWindow = () => {
 app.whenReady().then(() => {
     ipcMain.handle('search-arcsuite', async (event, searchParams, type) => {
         try {
-            console.log("Main Process: Received search params", searchParams, "type:", type);
+            //console.log("Main Process: Received search params", searchParams, "type:", type);
             
             // Call the function in arcsuite.js
             const resultData = await arcsuite.getDocList(searchParams, type);

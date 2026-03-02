@@ -185,16 +185,11 @@ async function docSearch() {
 
 async function reloadSpecificRow(recordId, rowNumber, instance) {
     try {
-        // 1. Get the ID or unique identifier from the current row
-        // Assuming 'id' is in a specific column, or get all row data
-        //const rowData = instance.getRowData(rowNumber);
-
-        // 2. Request updated data from the backend via Electron bridge
-        // You might need to create a new listener in main.js for 'single-search'
+        // Request updated data from the backend via Electron bridge
         const result = await window.electronAPI.search({ id: recordId }, 'byId'); // Pass type to distinguish search context
 
         if (result.success && result.data) {
-            // 3. Update the specific row with the new data object
+            // Update the specific row with the new data object
             // instance refers to the worksheet
             instance.setRowData(rowNumber, result.data[0]); 
             console.log(`Row ${rowNumber} updated successfully.`);
@@ -243,4 +238,3 @@ document.addEventListener('DOMContentLoaded', function () {
         window.location.href = 'arclogin.html';
     }
 })();
-
