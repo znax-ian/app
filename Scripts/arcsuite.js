@@ -270,8 +270,11 @@ async function getDocList(require, type) {
         const sessionId = await loginToArcSuite();
         const sessionString = (typeof sessionId === 'object' && sessionId._) ? sessionId._ : sessionId;
         const searchXml = makeSearchXml(require, type);
-        const res = await axios.post(BASE_URL, createSoapEnvelope(searchXml, sessionString), { headers: {'Content-Type': 'text/xml'}, responseType: 'text' });
-        const data = await parseSearchResults(res.data, type);
+        const res = await axios.post(BASE_URL, createSoapEnvelope(searchXml, sessionString), { headers: {'Content-Type': 'text/xml'}, responseType: 'arraybuffer' });
+        const buffer = res.data;
+        const winDecoder = new TextDecoder('windows-1252');
+        const decodedString = winDecoder.decode(buffer)
+        const data = await parseSearchResults(decodedString, type);
         return data;
 
     } catch (error) {
