@@ -3,7 +3,6 @@ const sql = require('mssql');
 const xml2js = require('xml2js');
 const parser = new xml2js.Parser({ explicitArray: false });
 
-const BOM = [];
 let counter = 0;
 const config = {
     user: process.env.DB_USER,
@@ -11,7 +10,10 @@ const config = {
     server: process.env.DB_SERVER,
     options: {
         encrypt: false,
-        trustServerCertificate: true
+        trustServerCertificate: true,
+        requestTimeout: 60000,
+        packetSize: 32768,
+        maxRowBufferSize: 10000
     }
 };
 
@@ -185,8 +187,10 @@ function insert(table,comp){
 
 async function getProductDetail(drawing) {
     let pool = null;
+    const BOM = [];
     try{
         pool = await sql.connect(config);
+        await pool.request().query(`IF OBJECT_ID('tempdb..#temptable') IS NOT NULL DROP TABLE #temptable`);
         const table = new sql.Table('#temptable');
         table.create = true;
         table.temporary = true;
@@ -267,8 +271,9 @@ async function getProductDetail(drawing) {
             return {success: false, BOM: [], SUBS: [], message: '部品表見つかりません'};
         }
 
-        await pool.request().bulk(table);
-        const result = await pool.request().query(`
+        if(table.rows.length){
+            await pool.request().bulk(table);
+            const result = await pool.request().query(`
             SELECT itemCode,jpartsName,epartsName,level,id,partsName,partsMass,partsUnit,matlName,matlPurp,matlMass,matlUnit,matlId,subsName,subsConc,subsCas,reach,rohs,crohs,tsca,
             TELS.targets AS target, TELS.rules AS rules,
             CAST(TELS.ppb AS FLOAT) / 10000000 AS thresholds,
@@ -295,9 +300,12 @@ async function getProductDetail(drawing) {
                 LEFT JOIN VTEX_CHEM.dbo.M_HitachiHT CAT ON CONCAT(HHT.Types,FORMAT(HHT.Groups, '000')) = CONCAT(CAT.Types,FORMAT(CAT.Groups, '000'))
                 WHERE CAT.NamesJP NOT IN ('GADSL', 'chemSHERPA管理対象物質','JAMP管理対象物質','IEC62474','MDR')
             ) AS HHTS ON HHTS.CAS_NO = TMP.subsCas
-            ORDER BY itemCode, level, id ASC`);
+            ORDER BY itemCode, id, level ASC`);
 
-        return {success: true, BOM: BOM4JSS, SUBS: result.recordset, message: ''};
+            return {success: true, BOM: BOM4JSS, SUBS: result.recordset, message: ''};
+        }else{
+            return {success: true, BOM: BOM4JSS, SUBS: [], message: ''};
+        }
 
     }catch(err){
         if(pool) await pool.close();

@@ -2,6 +2,8 @@ const { app, BrowserWindow, ipcMain, Menu, clipboard } = require('electron')
 const path = require('path');
 const arcsuite = require('./Scripts/arcsuite.js'); // Import the function from arcsuite.js
 const productQuery = require('./Scripts/productQuery.js'); // Import the function from productQuery.js
+const os = require('os');
+const username = os.userInfo().username
 
 const createWindow = () => {
     //Menu.setApplicationMenu(null);
@@ -13,17 +15,22 @@ const createWindow = () => {
             preload: path.join(__dirname, 'preload.js')
         }
     });
+
     win.loadFile('main.html');
-    win.on('blur', () => {
-    clipboard.writeText("");
-    });
-    win.on('minimize', () => {
-    clipboard.writeText("");
-    });
+    if(user !== 'ian_tsai'){
+        win.on('blur', () => {
+            clipboard.writeText("");
+        });
+        win.on('minimize', () => {
+            clipboard.writeText("");
+        });
+    }
 
 }
 
 app.whenReady().then(() => {
+    ipcMain.handle('username', () => {return username;});
+
     ipcMain.handle('search-arcsuite', async (event, searchParams, type) => {
         try {
             //console.log("Main Process: Received search params", searchParams, "type:", type);

@@ -6,6 +6,13 @@ async function productQuery() {
         drawing = document.getElementById('productCode').value;
 
         const result = await window.electronAPI.productQuery(drawing);
+        let chemList = [];
+        result.BOM.map((row, index) => {
+            if (row.Version) { // Assuming your data object has the 'Version' key
+                chemList.push(index);
+            }
+        });
+
 
         if (result.success) {
             document.getElementById('spreadsheet').innerHTML = ''; // Clear old table
@@ -24,9 +31,10 @@ async function productQuery() {
                         { type: 'text', title: '部品名', name: '部品名', width: 200 },
                         { type: 'text', title: '英語名称', name: '英語名称', width: 200 },
                         { type: 'text', title: '材質', name: '材質', width: 150 },
-                        { type: 'text', title: 'サイズ・タイプ', name: 'サイズ・タイプ', width: 200 },
-                        { type: 'text', title: '記事', name: '記事', width: 200 },
-                        { type: 'text', title: 'chemSHERPA', name: 'Version', width: 120 }
+                        { type: 'text', title: 'サイズ・タイプ', name: 'サイズ・タイプ', width: 250 },
+                        { type: 'text', title: '記事', name: '記事', width: 250 },
+                        { type: 'text', title: 'chemSHERPA', name: 'Version', width: 100 },
+                        { type: 'checkbox', title: '調査', width: 40}
                     ]
                 },
                 {
@@ -38,6 +46,7 @@ async function productQuery() {
                     columnSorting: false,
                     tableOverflow: true,
                     tableWidth: '100%',
+                    tableHeight: '800px',
                     freezeColumns: 2,
                     filters: true,
                     columns: [
@@ -63,21 +72,35 @@ async function productQuery() {
                             }
                          },
                         { type: 'hidden', title: '単位', name: 'matlUnit', width: 150 },
-                        { type: 'text', title: '分類記号', name: 'matlId', width: 150 },
+                        { type: 'text', title: '分類記号', name: 'matlId', width: 80 },
                         { type: 'text', title: '物質名', name: 'subsName', width: 150 },
                         { type: 'text', title: '濃度(%)', name: 'subsConc', width: 150 },
                         { type: 'text', title: 'CAS NO', name: 'subsCas', width: 150 },
-                        { type: 'text', title: 'REACH', name: 'reach', width: 150 },
-                        { type: 'text', title: 'RoHS', name: 'rohs', width: 150 },
-                        { type: 'text', title: 'C.RoHS', name: 'crohs', width: 150 },
-                        { type: 'text', title: 'TSCA', name: 'tsca', width: 150 },
-                        { type: 'text', title: '規制対象', name: 'target', width: 150 },
-                        { type: 'text', title: '規制名', name: 'rules', width: 150 },
-                        { type: 'text', title: '閾値', name: 'thresholds', width: 50 },
-                        { type: 'text', title: '判定', name: 'compliance', width: 50 },
-                        { type: 'text', title: '物質群コード', name: '物質群コード', width: 150 },
-                        { type: 'text', title: '分類', name: '分類', width: 150 },
-                        { type: 'text', title: '分類名', name: 'NamesJP', width: 150 }
+                        { type: 'text', title: 'REACH', name: 'reach', width: 100 },
+                        { type: 'text', title: 'EU.RoHS', name: 'rohs', width: 150 },
+                        { type: 'text', title: 'CN.RoHS', name: 'crohs', width: 100 },
+                        { type: 'text', title: 'TSCA', name: 'tsca', width: 100 },
+                        { type: 'text', title: '規制対象', name: 'target', width: 150,
+                            render: function(td){td.classList.add('TEL');}
+                         },
+                        { type: 'text', title: '規制名', name: 'rules', width: 150,
+                            render: function(td){td.classList.add('TEL');}
+                         },
+                        { type: 'text', title: '閾値', name: 'thresholds', width: 50,
+                            render: function(td){td.classList.add('TEL');}
+                         },
+                        { type: 'text', title: '判定', name: 'compliance', width: 40,
+                            render: function(td){td.classList.add('TEL');}
+                         },
+                        { type: 'text', title: '物質群コード', name: '物質群コード', width: 100,
+                            render: function(td){td.classList.add('HHT');}
+                         },
+                        { type: 'text', title: '分類', name: '分類', width: 100,
+                            render: function(td){td.classList.add('HHT');}
+                         },
+                        { type: 'text', title: '分類名', name: 'NamesJP', width: 150,
+                            render: function(td){td.classList.add('HHT');}
+                         }
                     ],
                     nestedHeaders:[
                         [
@@ -87,7 +110,20 @@ async function productQuery() {
                             { title: '日立ハイテク禁止物質', colspan: '3' }
                         ]
                     ]
-                }]});
+                }],
+                contextMenu: function(){
+                    let itemsArr = [];
+                    itemsArr.push({
+                        title: jSuites.translate('詳細'),
+                        onclick: function() {
+                        alert('ご不明な点がございましたら、システム管理者までお問い合わせください。');
+                        }
+                    });
+                    return itemsArr;
+                }
+            });
+            setTimeout(() =>{
+                applyChemClass(chemList)}, 50); // Delay to ensure the table is rendered before applying classes
         } else {
             alert("エラー: " + result.message);
         }
@@ -97,6 +133,14 @@ async function productQuery() {
     } finally {
         loadingOverlay.style.display = 'none';
     }
+}
+
+function applyChemClass(highlightedRows) {
+    highlightedRows.forEach(rowIndex => {
+        // Find the table row (tr) using the data-y attribute which matches the index
+        const row = document.querySelector(`#spreadsheet tr[data-y="${rowIndex}"]`);
+        if(row){row.classList.add('chem')};
+    });
 }
 
 document.addEventListener('DOMContentLoaded', function () {
