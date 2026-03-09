@@ -7,5 +7,6 @@ contextBridge.exposeInMainWorld('electronAPI', {
     login: (username, password) => ipcRenderer.invoke('login-arcsuite', { username, password }),
     productQuery: (drawing) => ipcRenderer.invoke('product-query', drawing),
     checkCredentials: () => ipcRenderer.invoke('check-credentials'),
-    getUser: () => ipcRenderer.invoke('username')
+    getUser: () => ipcRenderer.invoke('username'),
+    getEnv: () => ipcRenderer.invoke('get-env')
 });

@@ -2,11 +2,32 @@ const { app, BrowserWindow, ipcMain, Menu, clipboard, screen } = require('electr
 const path = require('path');
 const os = require('os');
 const { autoUpdater } = require('electron-updater'); 
+const dotenv = require('dotenv');
+const fs = require('fs');
+
+const username = os.userInfo().username;
+
+const envPath = app.isPackaged 
+    ? path.join(process.resourcesPath, '.env') 
+    : path.join(__dirname, '.env');
+
+if (fs.existsSync(envPath)) {
+    dotenv.config({ path: envPath });
+    console.log("Environment loaded from:", envPath);
+} else {
+    console.error("Environment file not found at:", envPath);
+}
 
 const arcsuite = require('./Scripts/arcsuite.js');
 const productQuery = require('./Scripts/productQuery.js');
 
-const username = os.userInfo().username;
+/*
+const sharedEnv = {
+    DB_SERVER: process.env.DB_SERVER,
+    DB_USER: process.env.DB_USER,
+    DB_PASSWORD: process.env.DB_PASSWORD,
+    ARC_HOST: process.env.ARC_HOST
+};*/
 
 const createWindow = () => {
     //Menu.setApplicationMenu(null);
@@ -45,6 +66,7 @@ autoUpdater.on('error', (err) => {
 
 app.whenReady().then(() => {
     ipcMain.handle('username', () => { return username; });
+    ipcMain.handle('get-env', () => { return sharedEnv; });
 
     ipcMain.handle('search-arcsuite', async (event, searchParams, type) => {
         try {

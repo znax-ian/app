@@ -1,6 +1,6 @@
 {
   "name": "arcsuite-electron",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Desktop client for QC tools",
   "license": "MIT",
   "author": "Ian",
@@ -31,8 +31,12 @@
   "build": {
     "appId": "io.github.znax-ian.qc-tools",
     "productName": "QC_Tools",
-    "files": [
+    "extraResources":[
       ".env"
+    ],
+    "files": [
+      "**/*",
+      "!.env"
     ],
     "directories": {
       "output": "dist"

@@ -1,7 +1,6 @@
 const axios = require('axios');
 const crypto = require('crypto');
 const xml2js = require('xml2js');
-require('dotenv').config();
 
 const CONFIG = {
     host: process.env.ARC_HOST,

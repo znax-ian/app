@@ -1,9 +1,9 @@
-require('dotenv').config();
 const sql = require('mssql');
 const xml2js = require('xml2js');
 const parser = new xml2js.Parser({ explicitArray: false });
 
 let counter = 0;
+
 const config = {
     user: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
