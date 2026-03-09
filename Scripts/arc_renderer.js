@@ -137,8 +137,8 @@ async function docSearch() {
                                     const id = idFull.replaceAll(':','%3A');
                                     td.innerHTML = `<a href="http://arcs-vtex.corp.vtex.local/ArcSuite/docspace/sdk/open.do?enc=UTF-8&id=${id}" target="_blank">属性変更</a>`;
                                 } // Generate link based on ID, open in new tab
-                            },
-                            { type: 'text', title: '更新', width: 80,
+                            }/*,
+                            { type: 'text', title: '更新', width: 80 ,
                                 render: function(td, value, x, y, instance) {
                                     const btn = document.createElement('button');
                                     btn.innerHTML = '更新';
@@ -149,7 +149,7 @@ async function docSearch() {
                                     }
                                     td.appendChild(btn);
                                 }
-                            }
+                            }*/
                                 ]
                         }],
                         contextMenu: function(){

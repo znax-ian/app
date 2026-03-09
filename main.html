@@ -3,20 +3,19 @@
 <head>
     <meta charset="UTF-8" />
         <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
-        <meta
-        http-equiv="Content-Security-Policy"
-        content="default-src 'self'; script-src 'self'"
-        />
-        <meta
-        http-equiv="X-Content-Security-Policy"
-        content="default-src 'self'; script-src 'self'"
-        />
+        <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'" />
+        <meta http-equiv="X-Content-Security-Policy" content="default-src 'self'; script-src 'self'" />
     <title>ツール集</title>
     <link rel="stylesheet" href="./Style/hamburger.css">
     <link rel="stylesheet" href="./Style/styles.css">
 </head>
 <body>
-    <div id="menu-placeholder"></div>
+    <header class="top-bar">
+        <div id="menu-placeholder"></div>
+        <div class="logo-container">
+            <img src="images/vtex_logo.png" alt="Company Logo" class="company-logo">
+        </div>
+    </header>
 
     <script src="./Scripts/sidemenu.js"></script>
     <script src="./Scripts/loadmenu.js"></script>

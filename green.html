@@ -3,14 +3,8 @@
     <head>
         <meta charset="UTF-8" />
             <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
-            <meta
-            http-equiv="Content-Security-Policy"
-            content="default-src 'self'; script-src 'self'; img-src 'self' data:"
-            />
-            <meta
-            http-equiv="X-Content-Security-Policy"
-            content="default-src 'self'; script-src 'self'"
-            />
+            <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; img-src 'self' data:" />
+            <meta http-equiv="X-Content-Security-Policy" content="default-src 'self'; script-src 'self'" />
         <title>グリーン調査</title>
         <script src="./node_modules/jsuites/dist/jsuites.js"></script>
         <script src="./node_modules/jspreadsheet-ce/dist/index.js"></script>
@@ -21,7 +15,13 @@
         <link rel="stylesheet" href="./Style/chem.css">
     </head>
     <body>
-        <div id="menu-placeholder"></div>
+        <header class="top-bar">
+            <div id="menu-placeholder"></div>
+            <div class="logo-container">
+                <img src="images/vtex_logo.png" alt="Company Logo" class="company-logo">
+            </div>
+        </header>
+        
         <div class="search-region">
             <div class="control-item">
                 <label for="productCode">製品番号:</label>

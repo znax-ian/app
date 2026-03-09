@@ -23,6 +23,9 @@ async function productQuery() {
                     defaultColAlign: 'left',
                     selectionCopy: false,
                     copyCompatibility: false,
+                    tableOverflow: true,
+                    tableWidth: '100%',
+                    tableHeight: '720px',
                     columns: [
                         { type: 'text', title: '図番', name: '図番', width: 100 },
                         { type: 'text', title: '品番', name: '品番', width: 35 },
@@ -46,7 +49,7 @@ async function productQuery() {
                     columnSorting: false,
                     tableOverflow: true,
                     tableWidth: '100%',
-                    tableHeight: '800px',
+                    tableHeight: '720px',
                     freezeColumns: 2,
                     filters: true,
                     columns: [

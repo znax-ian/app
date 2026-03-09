@@ -87,3 +87,43 @@
     opacity: 1;
     visibility: visible;
 }
+
+/* The main container for the top banner */
+.top-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 60px;
+    background-color: #d9e1f2; /* Or your preferred theme color */
+    display: flex;
+    align-items: center; /* Vertical center */
+    padding: 0 40px;
+    z-index: 1000; /* Stays above JSpreadsheet */
+}
+
+/* Container for the logo and text */
+.logo-container {
+    display: flex;
+    align-items: center;
+    margin-left: 20px; /* Space between hamburger and logo */
+}
+
+.company-logo {
+    height: 60px; /* Adjust based on your image size */
+    width: auto;
+    display: block;    /* Removes potential whitespace gaps below the image */
+    object-fit: contain; /* Ensures the image doesn't get cropped if the header is too small */
+}
+
+.app-title {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-left: 10px;
+    color: #333;
+}
+
+/* Push the spreadsheet down so it's not hidden by the fixed bar */
+.content-wrapper {
+    margin-top: 70px; 
+}

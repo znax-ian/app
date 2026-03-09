@@ -3,9 +3,18 @@
 }
 
 .TEL {
-    background-color: rgb(182, 206, 232);
+    background-color: rgb(182, 206, 232) !important;
 }
 
 .HHT{
-    background-color: rgb(255, 226, 153);
+    background-color: rgb(255, 226, 153) !important;
+}
+
+.search-region {
+    margin-top: 50px;
+    margin-left: 50px;
+}
+
+#spreadsheet {
+    margin-top: 20px;
 }

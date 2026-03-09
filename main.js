@@ -1,9 +1,12 @@
-const { app, BrowserWindow, ipcMain, Menu, clipboard } = require('electron')
+const { app, BrowserWindow, ipcMain, Menu, clipboard, screen } = require('electron');
 const path = require('path');
-const arcsuite = require('./Scripts/arcsuite.js'); // Import the function from arcsuite.js
-const productQuery = require('./Scripts/productQuery.js'); // Import the function from productQuery.js
 const os = require('os');
-const username = os.userInfo().username
+const { autoUpdater } = require('electron-updater'); 
+
+const arcsuite = require('./Scripts/arcsuite.js');
+const productQuery = require('./Scripts/productQuery.js');
+
+const username = os.userInfo().username;
 
 const createWindow = () => {
     //Menu.setApplicationMenu(null);
@@ -11,33 +14,41 @@ const createWindow = () => {
         width: 1200,
         height: 800,
         webPreferences: {
-            // Load the bridge file
             preload: path.join(__dirname, 'preload.js')
         }
     });
 
     win.loadFile('main.html');
-    if(user !== 'ian_tsai'){
-        win.on('blur', () => {
-            clipboard.writeText("");
-        });
-        win.on('minimize', () => {
-            clipboard.writeText("");
-        });
-    }
 
+    if(username !== 'ian_tsai'){
+        win.on('blur', () => { clipboard.writeText(""); });
+        win.on('minimize', () => { clipboard.writeText(""); });
+    };
+
+    win.once('ready-to-show', () => {
+        autoUpdater.checkForUpdatesAndNotify();
+    });
 }
 
+autoUpdater.on('update-available', () => {
+    console.log('Update available. Downloading...');
+});
+
+autoUpdater.on('update-downloaded', () => {
+    console.log('Update downloaded. It will be installed on restart.');
+    autoUpdater.quitAndInstall();
+});
+
+autoUpdater.on('error', (err) => {
+    console.error('Error in auto-updater: ', err);
+});
+
 app.whenReady().then(() => {
-    ipcMain.handle('username', () => {return username;});
+    ipcMain.handle('username', () => { return username; });
 
     ipcMain.handle('search-arcsuite', async (event, searchParams, type) => {
         try {
-            //console.log("Main Process: Received search params", searchParams, "type:", type);
-            
-            // Call the function in arcsuite.js
             const resultData = await arcsuite.getDocList(searchParams, type);
-            
             return { success: true, data: resultData };
         } catch (error) {
             console.error("Search Error:", error);
@@ -48,11 +59,7 @@ app.whenReady().then(() => {
     ipcMain.handle('login-arcsuite', async (event, { username, password }) => {
         try {
             const loginResult = await arcsuite.login(username, password);
-            if (loginResult.success) {
-                return { success: true };
-            } else {
-                return { success: false, error: loginResult.error };
-            }
+            return loginResult.success ? { success: true } : { success: false, error: loginResult.error };
         } catch (error) {
             console.error("Login Error:", error);
             return { success: false, error: error.message };
@@ -67,7 +74,7 @@ app.whenReady().then(() => {
             } else {
                 return { success: false, BOM: [], SUBS: [], message: productResult.message || '部品表見つかりません' };
             }   
-        }catch (error) {
+        } catch (error) {
             console.error("Product Query Error:", error);
             return { success: false, BOM: [], SUBS: [], message: error.message || 'エラーが発生しました' };
         }
@@ -77,18 +84,24 @@ app.whenReady().then(() => {
         return arcsuite.hasCredentials();
     });
 
-    createWindow()
+    ipcMain.handle('get-screen-size', () => {
+        const primaryDisplay = screen.getPrimaryDisplay();
+        const { width, height } = primaryDisplay.size;
+        
+        return { width, height };
+    });
+
+    createWindow();
 
     app.on('activate', () => {
         if (BrowserWindow.getAllWindows().length === 0) {
-        createWindow()
+            createWindow();
         }
-    })
-
-})
+    });
+});
 
 app.on('window-all-closed', () => {
     if (process.platform !== 'darwin') {
-        app.quit()
+        app.quit();
     }
-})
+});
