@@ -3,7 +3,7 @@
   "version": "1.0.2",
   "description": "Desktop client for QC tools",
   "license": "MIT",
-  "author": "Ian",
+  "author": "Ian Tsai",
   "type": "commonjs",
   "main": "main.js",
   "scripts": {
