@@ -30,7 +30,7 @@ const sharedEnv = {
 };*/
 
 const createWindow = () => {
-    //Menu.setApplicationMenu(null);
+    Menu.setApplicationMenu(null);
     const win = new BrowserWindow({
         width: 1200,
         height: 800,

@@ -139,3 +139,4 @@ backup/
 
 .env
 apikey.txt
+key.js
