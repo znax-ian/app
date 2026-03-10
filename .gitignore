@@ -141,3 +141,4 @@ backup/
 apikey.txt
 key.js
 .vscode/
+/.vscode
