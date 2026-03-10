@@ -142,3 +142,4 @@ apikey.txt
 key.js
 .vscode/
 /.vscode
+.vscode/launch.json
