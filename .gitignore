@@ -135,11 +135,11 @@ dist
 .yarn/install-state.gz
 .pnp.*
 
+# Local settings and keys
 backup/
-
-.env
 apikey.txt
 key.js
+.env
+
+# VS Code settings
 .vscode/
-/.vscode
-.vscode/launch.json
