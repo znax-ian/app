@@ -1,6 +1,6 @@
 {
   "name": "arcsuite-electron",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Desktop client for QC tools",
   "license": "MIT",
   "author": "Ian Tsai",
@@ -36,6 +36,7 @@
     ],
     "files": [
       "**/*",
+      "!.vscode${/*}",
       "!.env"
     ],
     "directories": {
@@ -49,10 +50,17 @@
       }
     ],
     "win": {
-      "target": [
-        "nsis"
-      ],
-      "icon": "images/icon.png"
+        "target": [
+            "nsis"
+        ],
+        "extraFiles": [
+            {
+                "from": "node_modules/electron/dist/locales",
+                "to": "locales",
+                "filter": ["en-US.pak", "ja.pak"]
+            }
+        ],
+        "icon": "images/icon.png"
     },
     "nsis": {
       "oneClick": false,
