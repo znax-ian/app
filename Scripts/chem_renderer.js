@@ -127,12 +127,18 @@ async function productQuery() {
             });
             setTimeout(() =>{
                 applyChemClass(chemList)}, 50); // Delay to ensure the table is rendered before applying classes
-        } else {
-            alert("エラー: " + result.message);
+        }else{
+            jSuites.notification({
+                showCloseButton: true,
+                timeout: 3000,
+                error: 1,
+                name: '検索エラー',
+                message: result.message,
+    });
         }
     } catch (error) {
-        console.error("製品クエリエラー:", error);
-        alert("部品表の検索中にエラーが発生しました: " + error.message);
+        console.error("Error at productQuery:", error);
+        alert("Error at productQuery: " + error.message);
     } finally {
         loadingOverlay.style.display = 'none';
     }
