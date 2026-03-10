@@ -1,6 +1,10 @@
 const sql = require('mssql');
 const xml2js = require('xml2js');
 const parser = new xml2js.Parser({ explicitArray: false });
+const crypto = require('crypto');
+const password = 'Tum090T65hVZC1ZEOLK5aU4vJ8+8msCwhDJgjlefMGc=';
+const salt = 'BXqiA1RplsOrZXxA6XWh0A==';
+const algorithm = 'aes-256-cbc';
 
 let counter = 0;
 
@@ -16,6 +20,17 @@ const config = {
         maxRowBufferSize: 10000
     }
 };
+
+function decrypt(text) {
+    const textParts = text.split(':');
+    const iv = Buffer.from(textParts.shift(), 'base64');
+    const key = crypto.scryptSync(password, salt, 32);
+    const encryptedText = Buffer.from(textParts.join(':'), 'base64');
+    const decipher = crypto.createDecipheriv(algorithm, key, iv);
+    let decrypted = decipher.update(encryptedText, 'base64', 'utf8');
+    decrypted += decipher.final('utf8');
+    return decrypted;
+}
 
 function makeComp(){
     return {
@@ -186,6 +201,8 @@ function insert(table,comp){
 }
 
 async function getProductDetail(drawing) {
+    const decryptedpw = decrypt(config.password)
+    config.password = decryptedpw;
     let pool = null;
     const BOM = [];
     try{
