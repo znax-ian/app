@@ -8,19 +8,6 @@ const algorithm = 'aes-256-cbc';
 
 let counter = 0;
 
-const config = {
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    server: process.env.DB_SERVER,
-    options: {
-        encrypt: false,
-        trustServerCertificate: true,
-        requestTimeout: 60000,
-        packetSize: 32768,
-        maxRowBufferSize: 10000
-    }
-};
-
 function decrypt(text) {
     const textParts = text.split(':');
     const iv = Buffer.from(textParts.shift(), 'base64');
@@ -201,8 +188,20 @@ function insert(table,comp){
 }
 
 async function getProductDetail(drawing) {
-    const decryptedpw = decrypt(config.password)
-    config.password = decryptedpw;
+    const decryptedpw = decrypt(process.env.DB_PASSWORD)
+    const config = {
+        user: process.env.DB_USER,
+        password: decryptedpw,
+        server: process.env.DB_SERVER,
+        options: {
+            encrypt: false,
+            trustServerCertificate: true,
+            requestTimeout: 60000,
+            packetSize: 32768,
+            maxRowBufferSize: 10000
+        }
+    };
+
     let pool = null;
     const BOM = [];
     try{
