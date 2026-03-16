@@ -8,13 +8,13 @@ const CONFIG = {
     password: ''
 };
 
-const BASE_URL = `http://${CONFIG.host}/ArcSuite/2006/08/ws`;
+const BASE_URL = `http://${CONFIG.host}/ArcSuite/2021/04/ws`;
 
 function createSoapEnvelope(body, sessionId = null) {
     let header = '';
     if (sessionId) header = `<soap:Header><types:Session>${sessionId}</types:Session></soap:Header>`;
     
-    return `<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:types="http://www.fujixerox.co.jp/2006/08/arcsuite/ws/types" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">${header}<soap:Body>${body}</soap:Body></soap:Envelope>`;
+    return `<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:types="http://www.fujifilm.com/fb/2021/04/arcsuite/ws/types" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">${header}<soap:Body>${body}</soap:Body></soap:Envelope>`;
 }
 
 function cleanMtomResponse(data) {
@@ -191,7 +191,7 @@ async function loginToArcSuite() {
     //console.log("-> Encrypting Password...");
     const key = crypto.createPublicKey({ key: { kty: "RSA", n: Buffer.from(modulus, 'base64').toString('base64url'), e: Buffer.from(exponent, 'base64').toString('base64url') }, format: 'jwk' });
     const encrypted = crypto.publicEncrypt({ key: key, padding: crypto.constants.RSA_PKCS1_PADDING }, Buffer.from(challenge + CONFIG.password));
-    const loginXml = `<types:login><types:userId>${CONFIG.user}</types:userId><types:credentialType>http://www.fujixerox.co.jp/2006/08/arcsuite/ws#EncryptedPassword</types:credentialType><types:credential>${encrypted.toString('base64')}</types:credential></types:login>`;
+    const loginXml = `<types:login><types:userId>${CONFIG.user}</types:userId><types:credentialType>http://www.fujifilm.com/fb/2021/04/arcsuite/ws#EncryptedPassword</types:credentialType><types:credential>${encrypted.toString('base64')}</types:credential></types:login>`;
     const loginRes = await axios.post(BASE_URL, createSoapEnvelope(loginXml, tempSession), { headers: {'Content-Type': 'text/xml'}, responseType: 'text' });
     return await parseXml(loginRes.data, 'Session');
 }
