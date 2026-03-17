@@ -2,7 +2,7 @@ async function docSearch() {
 
     const loadingOverlay = document.getElementById('loading-overlay');
     loadingOverlay.style.display = 'flex';
-
+    const outList = [];
     try {
         const region = document.getElementById('regionSelect').value;
         const role = document.querySelector('input[name="searchRole"]:checked').value;
@@ -25,9 +25,11 @@ async function docSearch() {
         //console.log("Sending to backend:", searchParams);
 
         const result = await window.electronAPI.search(searchParams, 'byPeriod'); // Pass type to distinguish search context
-
+        //const summary = summarizeKoubanData(result.data);
+        //console.log(summary);
         if (result.success) {
             //console.log("Data received:", result.data);
+            jspreadsheet.destroyAll();
             document.getElementById('spreadsheet').innerHTML = ''; // Clear old table
             switch(region) {
                 case 'rep:ARCSVTEX:21_HINSHO_CAB':
@@ -92,72 +94,108 @@ async function docSearch() {
                     });
                     break;
                 default:
+                    const summary = summarizeKoubanData(result.data);
+                    //console.log(summary);
                     jspreadsheet(document.getElementById('spreadsheet'), {
-                        worksheets: [{
-                            data: result.data,
+                        worksheets: [
+                        {
+                            worksheetName: '要約',
+                            data: summary,
                             defaultColAlign: 'left',
                             selectionCopy: false,
                             copyCompatibility: false,
                             columns: [
-                            { type: 'text', title: '名前', name: 'system:name', width: 250 },
-                            { type: 'text', title: '製番', name: 'user:seiban', width: 50 },
-                            { type: 'text', title: '工番', name: 'user:kouban', width: 180 },
-                            { type: 'text', title: '図番', name: 'user:zuban', width: 50 },
-                            { type: 'text', title: '製品名', name: 'user:seihin', width: 150 },
-                            { type: 'text', title: '顧客名', name: 'user:customar', width: 150 },
-                            { type: 'hidden', name: 'user:hinban'},
-                            { type: 'hidden', name: 'user:buhinzu'},
-                            { type: 'hidden', name: 'user:jisyocode' },
-                            { type: 'hidden', name: 'user:jisyou', width: 100 },
-                            { type: 'text', title: '部品名称', name: 'user:part_name', width: 150 },
-                            { type: 'hidden', name: 'user:kanribangou' },
-                            { type: 'hidden', name: 'user:origin' },
-                            { type: 'text', title: '最終変更日時', name: 'system:modifiedon', width: 150,
-                                render: function(cell, value) {
-                                    if (!value) return "";
-                                    const date = new Date(value);
-                                    const formatter = new Intl.DateTimeFormat('ja-JP', {
-                                        year: 'numeric',
-                                        month: '2-digit',
-                                        day: '2-digit',
-                                        hour: '2-digit',
-                                        minute: '2-digit',
-                                        hour12: false,
-                                        timeZone: 'Asia/Tokyo'
-                                    });
-                                    const parts = formatter.formatToParts(date);
-                                    const p = {};
-                                    parts.forEach(part => p[part.type] = part.value);
-                                    cell.innerHTML = `${p.year}/${p.month}/${p.day} ${p.hour}:${p.minute}`;
-                                }
-                            },
-                            { type: 'text', title: 'リンク', name: 'id', width: 100,
-                                render: function(td, value) {
-                                    const idFull = value.substring(4);
-                                    const id = idFull.replaceAll(':','%3A');
-                                    td.innerHTML = `<a href="http://arcs-vtex.corp.vtex.local/ArcSuite/docspace/sdk/open.do?enc=UTF-8&id=${id}" target="_blank">属性変更</a>`;
-                                } // Generate link based on ID, open in new tab
-                            }/*,
-                            { type: 'text', title: '更新', width: 80 ,
-                                render: function(td, value, x, y, instance) {
-                                    const btn = document.createElement('button');
-                                    btn.innerHTML = '更新';
-                                    btn.className = 'reload-btn';
-                                    btn.onclick = async () => {
-                                        const id = instance.getValueFromCoords(14, y); // Assuming 'id' is in the 14th column (index 13)
-                                        await reloadSpecificRow(id, y, instance);
+                                { type: 'text', title: '工番', name: 'kouban', width: 200 },
+                                { type: 'text', title: '総数', name: 'total', width: 100 },
+                                { type: 'text', title: '部組', name: 'bugumi', width: 100 },
+                                { type: 'text', title: '操作部', name: 'sousabu', width: 100 },
+                                { type: 'text', title: '判定', name: 'judge', width: 100,
+                                    render: function(td, value, x, y, instance){
+                                        const total = parseInt(instance.getValueFromCoords(1, y));
+                                        const bugumi = parseInt(instance.getValueFromCoords(2, y));
+                                        const sousabu = parseInt(instance.getValueFromCoords(3, y));
+                                        const seiban = total - bugumi - sousabu;
+                                        if (seiban === bugumi * 10 && seiban === sousabu * 10){
+                                            td.innerHTML = 'O'
+                                        }else{
+                                            td.innerHTML = 'X'
+                                            outList.push(y);
+                                        }
+
                                     }
-                                    td.appendChild(btn);
-                                }
-                            }*/
+                                 }
+                            ]
+
+                        },
+                        {
+                            worksheetName: '詳細',
+                            data: result.data,
+                            defaultColAlign: 'left',
+                            selectionCopy: false,
+                            copyCompatibility: false,
+                            search: true,
+                            columns: [
+                                { type: 'text', title: '名前', name: 'system:name', width: 250 },
+                                { type: 'text', title: '製番', name: 'user:seiban', width: 50 },
+                                { type: 'text', title: '工番', name: 'user:kouban', width: 180 },
+                                { type: 'text', title: '図番', name: 'user:zuban', width: 50 },
+                                { type: 'text', title: '製品名', name: 'user:seihin', width: 150 },
+                                { type: 'text', title: '顧客名', name: 'user:customar', width: 150 },
+                                { type: 'hidden', name: 'user:hinban'},
+                                { type: 'hidden', name: 'user:buhinzu'},
+                                { type: 'hidden', name: 'user:jisyocode' },
+                                { type: 'hidden', name: 'user:jisyou', width: 100 },
+                                { type: 'text', title: '部品名称', name: 'user:part_name', width: 150 },
+                                { type: 'hidden', name: 'user:kanribangou' },
+                                { type: 'hidden', name: 'user:origin' },
+                                { type: 'text', title: '最終変更日時', name: 'system:modifiedon', width: 150,
+                                    render: function(cell, value) {
+                                        if (!value) return "";
+                                        const date = new Date(value);
+                                        const formatter = new Intl.DateTimeFormat('ja-JP', {
+                                            year: 'numeric',
+                                            month: '2-digit',
+                                            day: '2-digit',
+                                            hour: '2-digit',
+                                            minute: '2-digit',
+                                            hour12: false,
+                                            timeZone: 'Asia/Tokyo'
+                                        });
+                                        const parts = formatter.formatToParts(date);
+                                        const p = {};
+                                        parts.forEach(part => p[part.type] = part.value);
+                                        cell.innerHTML = `${p.year}/${p.month}/${p.day} ${p.hour}:${p.minute}`;
+                                    }
+                                },
+                                { type: 'text', title: 'リンク', name: 'id', width: 100,
+                                    render: function(td, value) {
+                                        const idFull = value.substring(4);
+                                        const id = idFull.replaceAll(':','%3A');
+                                        td.innerHTML = `<a href="http://arcs-vtex.corp.vtex.local/ArcSuite/docspace/sdk/open.do?enc=UTF-8&id=${id}" target="_blank">属性変更</a>`;
+                                    } // Generate link based on ID, open in new tab
+                                }/*,
+                                { type: 'text', title: '更新', width: 80 ,
+                                    render: function(td, value, x, y, instance) {
+                                        const btn = document.createElement('button');
+                                        btn.innerHTML = '更新';
+                                        btn.className = 'reload-btn';
+                                        btn.onclick = async () => {
+                                            const id = instance.getValueFromCoords(14, y); // Assuming 'id' is in the 14th column (index 13)
+                                            await reloadSpecificRow(id, y, instance);
+                                        }
+                                        td.appendChild(btn);
+                                    }
+                                }*/
                                 ]
                         }],
-                        contextMenu: function(){
+                        contextMenu: function(instance,x,y){
                             let itemsArr = [];
                             itemsArr.push({
-                                title: jSuites.translate('詳細'),
+                                title: jSuites.translate('検索'),
                                 onclick: function() {
-                                alert('ご不明な点がございましたら、システム管理者までお問い合わせください。');
+                                    const cellValue = instance.getValueFromCoords(x, y);
+                                    jspreadsheet.spreadsheet[0].worksheets[1].search(cellValue);
+                                    jspreadsheet.spreadsheet[0].worksheets[1].openWorksheet(1);
                                 }
                             });
                             return itemsArr;
@@ -168,6 +206,7 @@ async function docSearch() {
         } else {
             alert("Search Failed: " + result.error);
         }
+        setTimeout(() =>{applyOutClass(outList)}, 50); // Delay to ensure the table is rendered before applying classes
         document.getElementById('startDate').disabled = true;
         document.getElementById('endDate').disabled = true;
         document.getElementById('userSelect').disabled = true;
@@ -217,6 +256,40 @@ function deleteContent() {
     document.getElementById('periodSelect').disabled = false;
 }
 
+function summarizeKoubanData(data) {
+    const summary = {};
+
+    data.forEach(item => {
+        // Handle cases where kouban might be empty or undefined
+        const kouban = item["user:kouban"] || "Unassigned";
+        const name = item["system:name"] || "";
+
+        // Initialize the kouban object if it doesn't exist
+        if (!summary[kouban]) {
+            summary[kouban] = {
+                kouban: kouban,
+                total: 0,
+                bugumi: 0,
+                sousabu: 0
+            };
+        }
+
+        // Increment counts
+        summary[kouban].total++;
+        if (name.includes("部組")) summary[kouban].bugumi++;
+        if (name.includes("操作部")) summary[kouban].sousabu++;
+    });
+
+    return Object.values(summary);
+}
+
+function applyOutClass(highlightedRows) {
+    highlightedRows.forEach(rowIndex => {
+        // Find the table row (tr) using the data-y attribute which matches the index
+        const row = document.querySelector(`#spreadsheet tr[data-y="${rowIndex}"]`);
+        if(row){row.classList.add('OUT')};
+    });
+}
 
 // Attach to button after DOM is ready
 document.addEventListener('DOMContentLoaded', function () {
