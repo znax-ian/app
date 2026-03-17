@@ -108,3 +108,7 @@ body {
 .search-region {
     margin-top: 50px;
 }
+
+.OUT {
+    background-color: rgb(247, 119, 157) !important;
+}
