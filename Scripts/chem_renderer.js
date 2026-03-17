@@ -1,3 +1,4 @@
+//window.ws = {}
 async function productQuery() {
 
     const loadingOverlay = document.getElementById('loading-overlay');
@@ -15,17 +16,22 @@ async function productQuery() {
 
 
         if (result.success) {
+            jspreadsheet.destroyAll();
             document.getElementById('spreadsheet').innerHTML = ''; // Clear old table
             jspreadsheet(document.getElementById('spreadsheet'), {
                 worksheets: [{
                     worksheetName: '部品表',
                     data: result.BOM,
+                    tabs:{
+                        position: 'bottom'
+                    },
                     defaultColAlign: 'left',
                     selectionCopy: false,
                     copyCompatibility: false,
                     tableOverflow: true,
                     tableWidth: '100%',
                     tableHeight: '720px',
+                    search: true,
                     columns: [
                         { type: 'text', title: '図番', name: '図番', width: 100 },
                         { type: 'text', title: '品番', name: '品番', width: 35 },
@@ -114,12 +120,28 @@ async function productQuery() {
                         ]
                     ]
                 }],
-                contextMenu: function(){
+                contextMenu: function(instance, x, y){
                     let itemsArr = [];
                     itemsArr.push({
-                        title: jSuites.translate('詳細'),
+                        title: '検索',
                         onclick: function() {
-                        alert('ご不明な点がございましたら、システム管理者までお問い合わせください。');
+                            const cellValue = instance.getValueFromCoords(x, y);
+                            //ws[0].search(cellValue);
+                            jspreadsheet.spreadsheet[0].worksheets[0].search(cellValue);
+                            jspreadsheet.spreadsheet[0].worksheets[0].openWorksheet(0);
+                        }
+                    });
+                    itemsArr.push({
+                        title: 'マーク',
+                        onclick: function() {
+                            //jspreadsheet.spreadsheet[0].worksheets[1].resetStyle(null,null,null,null);
+                            const range = jspreadsheet.spreadsheet[0].worksheets[1].getSelection();
+                            for (let i = range[0]; i <= range[2]; i++) {
+                                for (let j = range[1]; j <= range[3]; j++) {
+                                    const cell = jspreadsheet.helpers.getCellNameFromCoords(i, j);
+                                    jspreadsheet.spreadsheet[0].worksheets[1].setStyle(cell, 'background-color','yellow');
+                                }
+                            }
                         }
                     });
                     return itemsArr;
@@ -155,3 +177,7 @@ function applyChemClass(highlightedRows) {
 document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('product_search').addEventListener('click', productQuery);
 });
+
+function search(val){
+
+}
