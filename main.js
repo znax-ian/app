@@ -41,7 +41,7 @@ const createWindow = () => {
 
     win.loadFile('main.html');
 
-    if(username !== 'ian_tsai' || username !== 'a_sorimachi'){
+    if(username !== 'ian_tsai'){
         win.on('blur', () => { clipboard.writeText(""); });
         win.on('minimize', () => { clipboard.writeText(""); });
     };
