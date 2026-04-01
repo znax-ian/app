@@ -4,7 +4,7 @@ async function loadMenu() {
     const username = await window.electronAPI.getUser();
     
     let menuFile = 'menu.html';
-    if (username === 'ian_tsai') {
+    if (username === 'ian_tsai' || username === 'a_sorimachi') {
         menuFile = 'menu2.html';
     }
 
